@@ -34,8 +34,28 @@ export function XMermaid({ source }: MermaidBlockProps) {
         const isDark = document.documentElement.classList.contains("dark");
         mermaid.initialize({
           startOnLoad: false,
-          theme: isDark ? "dark" : "default",
-          fontFamily: "var(--font-code)",
+          theme: "base",
+          themeVariables: isDark ? {
+            primaryColor: "#24292e",
+            primaryBorderColor: "#30363d",
+            secondBgColor: "#2d333b",
+            textColor: "#c9d1d9",
+            fontFamily: "var(--font-code)",
+            primaryTextColor: "#c9d1d9",
+            tertiaryTextColor: "#8b949e",
+            lineColor: "#30363d",
+            signalTextDarkColor: "#c9d1d9",
+          } : {
+            primaryColor: "#ffffff",
+            primaryBorderColor: "#e1e4e8",
+            secondBgColor: "#f6f8fa",
+            textColor: "#24292e",
+            fontFamily: "var(--font-code)",
+            primaryTextColor: "#24292e",
+            tertiaryTextColor: "#586069",
+            lineColor: "#e1e4e8",
+            signalTextDarkColor: "#24292e",
+          },
           securityLevel: "loose",
         });
 

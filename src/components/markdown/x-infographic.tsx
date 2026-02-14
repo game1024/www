@@ -38,7 +38,10 @@ export function XInfographic({ syntax }: InfographicBlockProps) {
                 container: containerRef.current!,
                 width: "100%",
                 theme: isDark ? "dark" : "default",
-                themeConfig: { colorBg: isDark ? "#1F1F1F" : "#ffffff" },
+                themeConfig: {
+                  colorBg: isDark ? "#24292e" : "#ffffff",
+                  colorPrimary: isDark ? "#58a6ff" : "#0366d6",
+                },
             });
             infographic.render(syntax);
             instance.current = infographic;

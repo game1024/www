@@ -24,6 +24,17 @@ export function SourceCodeDialog({
   language = "text",
 }: SourceCodeDialogProps) {
   const [copied, setCopied] = React.useState(false);
+  const [isDark, setIsDark] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkDarkMode = () => {
+      setIsDark(document.documentElement.classList.contains("dark"));
+    };
+    checkDarkMode();
+    const observer = new MutationObserver(checkDarkMode);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
 
   const handleCopy = useCallback(async () => {
     try {
@@ -49,7 +60,7 @@ export function SourceCodeDialog({
         <DialogTitle className="sr-only">查看源码</DialogTitle>
 
         {/* 顶栏 */}
-        <div className="flex items-center justify-between px-4 py-2.5 border-b border-border shrink-0">
+        <div className="flex items-center justify-between px-4 py-2.5 border-b border-border shrink-0 bg-muted">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Icon icon="ri:code-s-slash-line" className="size-4" />
             <span>{language}</span>
@@ -80,7 +91,10 @@ export function SourceCodeDialog({
 
         {/* 代码区 */}
         <ScrollArea type="auto" className="w-full">
-          <pre className="max-h-[70vh] p-4 text-sm leading-relaxed whitespace-pre-wrap break-words text-foreground">
+          <pre 
+            className="max-h-[70vh] p-4 text-sm leading-relaxed whitespace-pre-wrap break-words text-neutral-900 dark:text-neutral-100"
+            style={{ backgroundColor: isDark ? "#24292e" : "#fafafa" }}
+          >
             <code className="font-code">{source}</code>
           </pre>
         </ScrollArea>

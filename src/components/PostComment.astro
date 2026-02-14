@@ -43,7 +43,7 @@ const { class: className } = Astro.props;
 
   // 监听主题切换，同步 giscus 主题
   function syncGiscusTheme() {
-    const observer = new MutationObserver(() => {
+    const sendThemeToGiscus = () => {
       const isDark = document.documentElement.classList.contains("dark");
       const iframe = document.querySelector<HTMLIFrameElement>("iframe.giscus-frame");
       if (iframe) {
@@ -52,11 +52,29 @@ const { class: className } = Astro.props;
           "https://giscus.app"
         );
       }
-    });
+    };
 
-    observer.observe(document.documentElement, {
+    // 监听主题变化
+    const themeObserver = new MutationObserver(() => {
+      sendThemeToGiscus();
+      // 同时更新 script 的 data-theme，以防 iframe 尚未加载
+      const script = document.querySelector("script[src*='giscus.app']");
+      const isDark = document.documentElement.classList.contains("dark");
+      if (script) {
+        script.setAttribute("data-theme", isDark ? "dark" : "light");
+      }
+    });
+    themeObserver.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ["class"],
+    });
+
+    // 监听 Giscus iframe 就绪消息，加载完成后立即同步当前主题
+    window.addEventListener("message", (e) => {
+      if (e.origin !== "https://giscus.app") return;
+      if (typeof e.data !== "object" || !e.data.giscus) return;
+      // giscus 已就绪，发送当前主题
+      sendThemeToGiscus();
     });
   }
 
