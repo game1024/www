@@ -6,7 +6,8 @@
     "dev": "astro dev",
     "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "new:post": "bun scripts/new-post.ts"
   },
   "dependencies": {
     "@antv/infographic": "^0.2.14",

@@ -44,6 +44,17 @@ const {
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <!-- 字体预连接 -->
+        <link rel="preconnect" href="https://chinese-fonts-cdn.deno.dev" crossorigin />
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <!-- 异步加载字体 -->
+        <link rel="stylesheet" href="https://chinese-fonts-cdn.deno.dev/packages/lxgwwenkaibright/dist/LXGWBright-SemiLight/result.css" media="print" onload="this.media='all'" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300..700&display=swap" media="print" onload="this.media='all'" />
+        <noscript>
+          <link rel="stylesheet" href="https://chinese-fonts-cdn.deno.dev/packages/lxgwwenkaibright/dist/LXGWBright-SemiLight/result.css" />
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300..700&display=swap" />
+        </noscript>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css" integrity="sha384-zh0CIslj+VczCZtlzBcjt5ppRcsAmDnRem7ESsYwWwg3m/OaJ2l4x7YBZl9Kxxib" crossorigin="anonymous" />
         <meta name="generator" content={Astro.generator} />
         <script is:inline>
