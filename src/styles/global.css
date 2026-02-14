@@ -83,6 +83,7 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --highlight: oklch(0.488 0.243 264.376);
 }
 
 .dark {
@@ -117,6 +118,7 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --highlight: oklch(0.7 0.18 264.376);
 }
 
 @layer base {
@@ -762,12 +764,15 @@ x-file-tree .ft-icon {
 
 x-file-tree .ft-name {
   white-space: nowrap;
-  padding: 0 0.25rem;
+  padding: 0.05rem 0.35rem;
 }
 
 x-file-tree .ft-highlight {
   font-weight: 600;
-  color: var(--primary);
+  color: var(--highlight);
+  background-color: color-mix(in oklch, var(--highlight) 10%, transparent);
+  border-radius: 0.25rem;
+  padding: 0.05rem 0.35rem;
 }
 
 x-file-tree .ft-comment {
