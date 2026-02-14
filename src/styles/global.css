@@ -180,6 +180,13 @@
     @apply bg-muted text-foreground font-code text-[0.875em] px-1.5 py-0.5 rounded-md border border-border;
   }
 
+  /* 删除线样式 */
+  .prose del,
+  .prose s,
+  .prose strike {
+    @apply line-through text-muted-foreground;
+  }
+
   /* 锚点链接样式 */
   .prose .anchor-link {
     @apply no-underline;

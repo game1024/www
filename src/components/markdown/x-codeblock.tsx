@@ -71,7 +71,6 @@ export function XCodeBlock({ code, language, title, frame, collapse }: CodeBlock
     setTimeout(() => setCopied(false), 1000);
   }, [code]);
 
-  console.log(frame);
   const isCollapsed = needsCollapse && !expanded;
 
   return (
@@ -117,7 +116,7 @@ export function XCodeBlock({ code, language, title, frame, collapse }: CodeBlock
         <div className={isCollapsed ? "max-h-[calc(1.65rem*5+2rem)] overflow-hidden" : ""}>
           {html ? (
             <div
-              className="shiki-wrapper [&>pre]:p-4 [&>pre]:m-0 [&>pre]:overflow-x-auto [&>pre]:text-sm [&>pre]:leading-relaxed [&_code]:font-code"
+              className="shiki-wrapper [&>pre]:p-4 [&>pre]:m-0 [&>pre]:overflow-x-auto [&>pre]:text-sm [&>pre]:leading-relaxed [&_code]:font-code [&_span]:!no-underline [&_span]:![text-decoration:none]"
               dangerouslySetInnerHTML={{ __html: html }}
             />
           ) : (

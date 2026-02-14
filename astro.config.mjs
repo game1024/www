@@ -26,7 +26,6 @@ export default defineConfig({
     }),
     icon(),
     mdx({
-      gfm: true,
       syntaxHighlight: false,
       remarkPlugins: [
         remarkDirective, 
