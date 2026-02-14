@@ -1,5 +1,3 @@
-@import url("https://chinese-fonts-cdn.deno.dev/packages/lxgwwenkaibright/dist/LXGWBright-SemiLight/result.css");
-@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300..700&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "./directives.css";

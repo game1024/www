@@ -41,7 +41,7 @@ export function DiagramOverlay({ open, onClose, children }: DiagramOverlayProps)
 
     if (contentW <= 0 || contentH <= 0) return 1;
 
-    const padding = 48;
+    const padding = 8;
     return Math.min(
       (containerW - padding * 2) / contentW,
       (containerH - padding * 2) / contentH,
