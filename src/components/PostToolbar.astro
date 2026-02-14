@@ -1,0 +1,72 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div id="post-toolbar" class="sticky bottom-6 z-40 flex justify-end opacity-0 translate-y-4 transition-all duration-300 pointer-events-none">
+  <div class="flex flex-col gap-2 pointer-events-auto">
+  <button
+    id="btn-scroll-comment"
+    class="flex items-center justify-center size-10 rounded-full bg-background border border-border shadow-md hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
+    aria-label="跳转评论区"
+    title="跳转评论区"
+  >
+    <Icon name="ri:chat-3-line" class="size-5" />
+  </button>
+
+  <button
+    id="btn-scroll-top"
+    class="flex items-center justify-center size-10 rounded-full bg-background border border-border shadow-md hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
+    aria-label="返回顶部"
+    title="返回顶部"
+  >
+    <Icon name="ri:arrow-up-line" class="size-5" />
+  </button>
+  </div>
+</div>
+
+<script>
+  function initToolbar() {
+    const toolbar = document.getElementById("post-toolbar");
+    const btnTop = document.getElementById("btn-scroll-top");
+    const btnComment = document.getElementById("btn-scroll-comment");
+    if (!toolbar) return;
+
+    // 滚动超过 300px 显示
+    let ticking = false;
+    function updateVisibility() {
+      if (window.scrollY > 300) {
+        toolbar!.classList.remove("opacity-0", "translate-y-4", "pointer-events-none");
+        toolbar!.classList.add("opacity-100", "translate-y-0", "pointer-events-auto");
+      } else {
+        toolbar!.classList.add("opacity-0", "translate-y-4", "pointer-events-none");
+        toolbar!.classList.remove("opacity-100", "translate-y-0", "pointer-events-auto");
+      }
+      ticking = false;
+    }
+
+    window.addEventListener("scroll", () => {
+      if (!ticking) {
+        requestAnimationFrame(updateVisibility);
+        ticking = true;
+      }
+    }, { passive: true });
+
+    updateVisibility();
+
+    // 返回顶部
+    btnTop?.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    // 跳转评论区
+    btnComment?.addEventListener("click", () => {
+      const giscus = document.querySelector(".giscus-wrapper");
+      if (giscus) {
+        giscus.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  }
+
+  initToolbar();
+  document.addEventListener("astro:page-load", initToolbar);
+</script>

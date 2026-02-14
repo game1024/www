@@ -1,0 +1,119 @@
+---
+import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+import PostLayout from '@/layouts/PostLayout.astro';
+import PostTOC from '@/components/PostTOC.astro';
+import Marquee from '@/components/Marquee.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await post.render();
+
+// 计算字数和阅读时长
+const text = post.body
+  .replace(/```[\s\S]*?```/g, '') // 移除代码块
+  .replace(/`[^`]+`/g, '') // 移除行内代码
+  .replace(/!\[.*?\]\(.*?\)/g, '') // 移除图片
+  .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // 保留链接文本
+  .replace(/<[^>]+>/g, '') // 移除 HTML 标签
+  .replace(/[#*_~\-+=[\](){}]/g, '') // 移除 markdown 标记
+  .replace(/\s+/g, ' ') // 合并空白
+  .trim();
+
+const chineseChars = (text.match(/[\u4e00-\u9fa5]/g) || []).length;
+const englishWords = (text.match(/[a-zA-Z]+/g) || []).length;
+const wordCount = chineseChars + englishWords;
+const readingTime = Math.ceil((chineseChars / 300 + englishWords / 200));
+---
+
+<PostLayout
+  title={post.data.title}
+  createdAt={post.data.createdAt}
+  updatedAt={post.data.updatedAt}
+  description={post.data.description}
+  cover={post.data.cover}
+  authorName="Game1024"
+>
+  <article data-pagefind-body class="prose prose-slate dark:prose-invert max-w-none prose-pre:p-0 prose-pre:bg-transparent">
+    <header id="article-title" class="mb-10 not-prose">
+      <Marquee text={post.data.title} tag="h1" class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 text-primary leading-tight" duration={3} />
+      {post.data.description && (
+        <p class="text-lg text-muted-foreground mb-4">{post.data.description}</p>
+      )}
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
+        <span class="inline-flex items-center gap-1.5">
+          <Icon name="ri:calendar-line" class="size-4 shrink-0" />
+          <time datetime={post.data.createdAt.toISOString()}>
+            {post.data.createdAt.toLocaleDateString('zh-CN', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+          </time>
+        </span>
+        {post.data.updatedAt && (
+          <span class="inline-flex items-center gap-1.5">
+            <Icon name="ri:history-line" class="size-4 shrink-0" />
+            <time datetime={post.data.updatedAt.toISOString()}>
+              {post.data.updatedAt.toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
+            </time>
+          </span>
+        )}
+
+        <span class="inline-flex items-center gap-1.5">
+          <Icon name="ri:pen-nib-line" class="size-4 shrink-0" />
+          {wordCount.toLocaleString()} 字
+        </span>
+        <span class="inline-flex items-center gap-1.5">
+          <Icon name="ri:time-line" class="size-4 shrink-0" />
+          阅读约 {readingTime} 分钟
+        </span>
+      </div>
+      {(post.data.category || (post.data.tags && post.data.tags.length > 0)) && (
+        <div class="flex flex-wrap items-center gap-2 mt-3 text-sm">
+          {post.data.category && (
+            <>
+              <Icon name="ri:stack-line" class="size-4 text-muted-foreground shrink-0" />
+              <a href={`/categories/${post.data.category}`} class="text-muted-foreground hover:text-foreground transition-colors">{post.data.category}</a>
+            </>
+          )}
+          {post.data.tags && post.data.tags.length > 0 && (
+            <>
+              {post.data.category && <span class="text-muted-foreground mx-1">•</span>}
+              <Icon name="ri:price-tag-3-line" class="size-4 text-muted-foreground shrink-0" />
+              {post.data.tags.map((tag) => (
+                <a href={`/tags/${tag}`} class="px-2.5 py-0.5 text-xs font-medium bg-muted text-muted-foreground rounded-full hover:bg-accent hover:text-accent-foreground transition-colors">{tag}</a>
+              ))}
+            </>
+          )}
+        </div>
+      )}
+      <hr class="mt-6 border-border" />
+    </header>
+    <div class="game-markdown-content">
+      <Content />
+    </div>
+  </article>
+  
+  <PostTOC slot="toc" headings={headings} articleTitle={post.data.title} />
+</PostLayout>
+
+<script>
+  import { enhanceCodeBlocks } from '@/components/markdown/enhance-codeblocks';
+  enhanceCodeBlocks();
+</script>

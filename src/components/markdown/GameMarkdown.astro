@@ -1,0 +1,12 @@
+---
+import GameMarkdownComponent from "./GameMarkdown.tsx";
+
+export interface Props {
+  content: string;
+  class?: string;
+}
+
+const { content, class: className } = Astro.props;
+---
+
+<GameMarkdownComponent client:load content={content} className={className} />

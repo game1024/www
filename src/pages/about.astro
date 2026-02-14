@@ -1,0 +1,60 @@
+---
+import HomeLayout from "@/layouts/HomeLayout.astro"
+import { Icon } from "astro-icon/components"
+---
+
+<HomeLayout
+  title="关于 - Game1024の博客"
+  description="关于我"
+  authorName="Game1024"
+>
+  <div class="max-w-2xl space-y-8">
+    {/* 标题 */}
+    <div class="flex items-center gap-3">
+      <Icon name="ri:user-fill" class="size-6 text-primary" />
+      <h1 class="text-2xl font-bold">关于</h1>
+    </div>
+
+    {/* 简介 */}
+    <section class="space-y-4">
+      <h2 class="text-lg font-semibold flex items-center gap-2">
+        <Icon name="ri:quill-pen-fill" class="size-4 text-muted-foreground" />
+        关于我
+      </h2>
+      <div class="prose prose-sm dark:prose-invert">
+        <p>你好，我是 <strong>Game1024</strong>，一名开发者。喜欢分享各种有趣的知识</p>
+      </div>
+    </section>
+
+    {/* 技术栈 */}
+    <section class="space-y-4">
+      <h2 class="text-lg font-semibold flex items-center gap-2">
+        <Icon name="ri:code-s-slash-fill" class="size-4 text-muted-foreground" />
+        技术栈
+      </h2>
+      <div class="flex flex-wrap gap-2">
+        {["TypeScript", "React", "Astro", "Tailwind CSS", "Node.js", "Bun"].map(tech => (
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm border border-border bg-card text-foreground">
+            {tech}
+          </span>
+        ))}
+      </div>
+    </section>
+
+    {/* 关于本站 */}
+    <section class="space-y-4">
+      <h2 class="text-lg font-semibold flex items-center gap-2">
+        <Icon name="ri:global-fill" class="size-4 text-muted-foreground" />
+        关于本站
+      </h2>
+      <div class="prose prose-sm dark:prose-invert">
+        <ul>
+          <li>框架：<a href="https://astro.build" target="_blank">Astro</a></li>
+          <li>样式：<a href="https://tailwindcss.com" target="_blank">Tailwind CSS</a> + <a href="https://ui.shadcn.com" target="_blank">shadcn/ui</a></li>
+          <li>字体：<a href="https://github.com/lxgw/LxgwBright" target="_blank">霞鹜文楷</a></li>
+          <li>部署：Edgeone</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+</HomeLayout>

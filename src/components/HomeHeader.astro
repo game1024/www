@@ -1,0 +1,171 @@
+---
+import { Icon } from "astro-icon/components";
+import { ThemeToggle } from "./ui/theme-toggle";
+import { SearchDialog } from "./SearchDialog";
+
+export interface Props {
+    /** 作者名称 */
+    authorName?: string;
+    /** Logo 图标 */
+    logoIcon?: string;
+    /** 自定义类名 */
+    class?: string;
+}
+
+const {
+    authorName = "作者",
+    logoIcon = "ri:quill-pen-fill",
+    class: className,
+} = Astro.props;
+
+const navItems = [
+    { icon: "ri:archive-fill", href: "/archive", label: "归档" },
+    { icon: "ri:stack-fill", href: "/categories", label: "分类" },
+    { icon: "ri:price-tag-3-fill", href: "/tags", label: "标签" },
+    { icon: "ri:user-fill", href: "/about", label: "关于" },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header
+    id="main-header"
+    class:list={[
+        "sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-transform duration-300",
+        className,
+    ]}
+>
+    <div
+        class="w-full flex h-16 items-center px-3 sm:px-4 md:px-8 gap-2 sm:gap-4 max-w-screen-2xl mx-auto"
+    >
+        <!-- 左侧：Logo 和作者名称 -->
+        <a
+            href="/"
+            class="flex items-center gap-2 text-foreground hover:opacity-80 transition-opacity"
+        >
+            <Icon name={logoIcon} class="size-6" />
+            <span class="font-semibold text-lg hidden sm:inline-block">{authorName}の博客</span>
+        </a>
+
+        <!-- 中间：导航菜单 -->
+        <nav class="hidden md:flex items-center gap-1">
+            {
+                navItems.map((item) => {
+                    const isActive =
+                        currentPath === item.href ||
+                        (item.href !== "/" &&
+                            currentPath.startsWith(item.href));
+
+                    return (
+                        <a
+                            href={item.href}
+                            class:list={[
+                                "flex items-center gap-2 px-2 py-2 rounded-md text-sm font-medium transition-colors",
+                                isActive
+                                    ? "bg-muted text-foreground"
+                                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                            ]}
+                        >
+                            <Icon name={item.icon} class="size-4" />
+                            <span>{item.label}</span>
+                        </a>
+                    );
+                })
+            }
+        </nav>
+
+        <div class="flex-1 flex justify-end items-center gap-2">
+            <!-- 搜索 -->
+            <SearchDialog client:load />
+            <!-- 主题切换按钮 -->
+
+            <ThemeToggle client:load />
+            <!-- 移动端菜单按钮 -->
+            <button
+                id="mobile-menu-btn"
+                class="md:hidden flex items-center justify-center size-9 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
+                aria-label="菜单"
+            >
+                <Icon name="ri:menu-line" class="size-4" />
+            </button>
+        </div>
+    </div>
+    <!-- 移动端导航菜单 -->
+    <nav id="mobile-menu" class="hidden md:hidden border-t border-border bg-background/95 backdrop-blur">
+        <div class="px-4 py-3 space-y-1">
+            {navItems.map((item) => {
+                const isActive = currentPath === item.href || (item.href !== "/" && currentPath.startsWith(item.href));
+                return (
+                    <a
+                        href={item.href}
+                        class:list={[
+                            "flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors",
+                            isActive ? "bg-muted text-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                        ]}
+                    >
+                        <Icon name={item.icon} class="size-4" />
+                        <span>{item.label}</span>
+                    </a>
+                );
+            })}
+        </div>
+    </nav>
+</header>
+
+<script>
+    function initMobileMenu() {
+        const btn = document.getElementById("mobile-menu-btn");
+        const menu = document.getElementById("mobile-menu");
+        if (!btn || !menu) return;
+
+        btn.addEventListener("click", () => {
+            menu.classList.toggle("hidden");
+        });
+    }
+
+    function initHeaderScroll() {
+        const header = document.getElementById("main-header");
+        if (!header) return;
+
+        let lastScrollY = window.scrollY;
+        let ticking = false;
+        const headerHeight = header.offsetHeight;
+
+        const stickyEls = document.querySelectorAll<HTMLElement>("[data-stick-to-header]");
+
+        function update() {
+            const currentScrollY = window.scrollY;
+
+            if (currentScrollY > headerHeight) {
+                header!.style.transform = "translateY(-100%)";
+                stickyEls.forEach(el => {
+                    el.style.top = "0";
+                    el.style.height = "100vh";
+                });
+            } else {
+                header!.style.transform = "translateY(0)";
+                stickyEls.forEach(el => {
+                    el.style.top = `${headerHeight}px`;
+                    el.style.height = `calc(100vh - ${headerHeight}px)`;
+                });
+            }
+
+            lastScrollY = currentScrollY;
+            ticking = false;
+        }
+
+        window.addEventListener("scroll", () => {
+            if (!ticking) {
+                requestAnimationFrame(update);
+                ticking = true;
+            }
+        }, { passive: true });
+    }
+
+    initHeaderScroll();
+    initMobileMenu();
+    document.addEventListener("astro:page-load", () => {
+        initHeaderScroll();
+        initMobileMenu();
+    });
+</script>

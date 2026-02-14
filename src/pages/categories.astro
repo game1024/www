@@ -1,0 +1,50 @@
+---
+import HomeLayout from "@/layouts/HomeLayout.astro"
+import { getCollection } from "astro:content"
+import { Icon } from "astro-icon/components"
+
+const allPosts = (await getCollection("posts"))
+  .filter(p => !p.data.draft)
+  .sort((a, b) => b.data.createdAt.getTime() - a.data.createdAt.getTime());
+
+// 按分类分组
+const postsByCategory = new Map<string, typeof allPosts>();
+for (const post of allPosts) {
+  const cat = post.data.category || "未分类";
+  if (!postsByCategory.has(cat)) postsByCategory.set(cat, []);
+  postsByCategory.get(cat)!.push(post);
+}
+
+// 按文章数量排序
+const sortedCategories = [...postsByCategory.entries()]
+  .sort((a, b) => b[1].length - a[1].length);
+---
+
+<HomeLayout
+  title="分类 - Game1024の博客"
+  description="文章分类"
+  authorName="Game1024"
+>
+  <div class="space-y-8">
+    <div class="flex items-center gap-3">
+      <Icon name="ri:stack-fill" class="size-6 text-primary" />
+      <h1 class="text-2xl font-bold">分类</h1>
+      <span class="text-sm text-muted-foreground">共 {sortedCategories.length} 个分类</span>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+      {sortedCategories.map(([category, posts]) => (
+        <a
+          href={`/categories/${encodeURIComponent(category)}`}
+          class="flex items-center justify-between p-4 rounded-lg border border-border bg-card hover:bg-muted hover:border-primary/30 transition-all group"
+        >
+          <div class="flex items-center gap-2 min-w-0">
+            <Icon name="ri:folder-fill" class="size-4 text-primary shrink-0" />
+            <span class="text-sm font-medium text-foreground group-hover:text-primary transition-colors truncate">{category}</span>
+          </div>
+          <span class="text-xs text-muted-foreground shrink-0 ml-2">{posts.length} 篇</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</HomeLayout>

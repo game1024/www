@@ -1,0 +1,67 @@
+---
+// Steps 组件 - 参考 Starlight 实现
+// 用于将有序列表渲染为步骤式指南
+---
+
+<div class="steps">
+  <slot />
+</div>
+
+<style is:global>
+  .steps {
+    --bullet-size: 1.5rem;
+    --bullet-margin: 0.375rem;
+  }
+
+  .steps > ol {
+    list-style: none;
+    counter-reset: steps-counter;
+    padding-inline-start: 0;
+    position: relative;
+  }
+
+  .steps > ol > li {
+    counter-increment: steps-counter;
+    position: relative;
+    padding-inline-start: calc(var(--bullet-size) + 1rem);
+    padding-bottom: 1rem;
+    min-height: calc(var(--bullet-size) + var(--bullet-margin));
+  }
+
+  .steps > ol > li + li {
+    margin-top: 0;
+  }
+
+  /* 圆形数字标记 */
+  .steps > ol > li::before {
+    content: counter(steps-counter);
+    position: absolute;
+    top: 0;
+    inset-inline-start: 0;
+    width: var(--bullet-size);
+    height: var(--bullet-size);
+    line-height: var(--bullet-size);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--primary-foreground);
+    background-color: var(--primary);
+    border-radius: 99rem;
+  }
+
+  /* 连接各步骤的垂直线 */
+  .steps > ol > li::after {
+    --guide-width: 1px;
+    content: '';
+    position: absolute;
+    top: calc(var(--bullet-size) + var(--bullet-margin));
+    bottom: var(--bullet-margin);
+    inset-inline-start: calc(var(--bullet-size) / 2 - var(--guide-width) / 2);
+    width: var(--guide-width);
+    background-color: var(--border);
+  }
+
+  .steps > ol > li:last-child::after {
+    display: none;
+  }
+</style>

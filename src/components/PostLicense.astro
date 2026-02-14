@@ -1,0 +1,98 @@
+---
+import { Icon } from "astro-icon/components"
+
+// PostLicense 组件 - 文章许可证声明
+interface Props {
+  title: string;
+  url?: string;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
+}
+
+const { title, url, createdAt, updatedAt } = Astro.props;
+const currentUrl = url || Astro.url.href;
+const createdAtObj = createdAt ? (typeof createdAt === 'string' ? new Date(createdAt) : createdAt) : new Date();
+const createdAtText = `${createdAtObj.getFullYear()}年${(createdAtObj.getMonth() + 1).toString()}月${createdAtObj.getDate().toString()}日 ${createdAtObj.getHours().toString().padStart(2, '0')}:${createdAtObj.getMinutes().toString().padStart(2, '0')}`;
+const updatedAtObj = updatedAt ? (typeof updatedAt === 'string' ? new Date(updatedAt) : updatedAt) : new Date();
+const updatedAtText = `${updatedAtObj.getFullYear()}年${(updatedAtObj.getMonth() + 1).toString()}月${updatedAtObj.getDate().toString()}日 ${updatedAtObj.getHours().toString().padStart(2, '0')}:${updatedAtObj.getMinutes().toString().padStart(2, '0')}`;
+---
+
+<div class="post-license">
+  <div class="license-content">
+    <div class="license-text">
+      <div class="flex items-center gap-2 mb-2">
+        <Icon name="ri:information-line" class="size-5 text-muted-foreground" />
+        <h4>文档信息</h4>
+      </div>
+      <hr class="title-divider" />
+      <div class="license-item">
+        <span class="label">版权：</span>
+        <span>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener noreferrer">CC-BY-NC-SA 4.0</a> 许可协议</span>
+      </div>
+        <div class="license-item">
+        <span class="label">日期：</span>
+        <span>{createdAtText}</span>
+      </div>
+      <div class="license-item">
+        <span class="label">作者：</span>
+        <span>Game1024</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .post-license {
+    margin-top: 3rem;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background-color: var(--muted);
+  }
+
+  .license-content {
+    display: block;
+  }
+
+  .license-text h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--foreground);
+  }
+
+  .license-text p {
+    margin: 0.5rem 0;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--muted-foreground);
+  }
+
+  .license-item {
+    margin: 0.5rem 0;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--muted-foreground);
+  }
+
+  .license-item .label {
+    font-weight: 500;
+    color: var(--foreground);
+  }
+
+  .license-text a {
+    color: var(--primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .license-text a:hover {
+    color: var(--foreground);
+  }
+
+  .title-divider {
+    margin: 0.75rem 0;
+    border: 0;
+    border-top: 1px solid var(--border);
+  }
+</style>

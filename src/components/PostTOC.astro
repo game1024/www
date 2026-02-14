@@ -1,0 +1,120 @@
+---
+import { Icon } from "astro-icon/components"
+import Marquee from "@/components/Marquee.astro"
+
+export interface Props {
+  headings: {
+    depth: number
+    slug: string
+    text: string
+  }[]
+  articleTitle?: string
+  title?: string
+  class?: string
+}
+
+const { headings, articleTitle, title = "本页内容", class: className } = Astro.props
+
+// 显示 h1, h2 和 h3 标题
+const tocHeadings = headings.filter(h => h.depth >= 1 && h.depth <= 3)
+---
+
+{tocHeadings.length > 0 && (
+  <div class="p-4">
+    <div class="flex items-center gap-2 mb-4">
+      <Icon name="ri:list-unordered" class="size-5 text-muted-foreground" />
+      <h2 class="font-semibold text-sm">{title}</h2>
+    </div>
+    
+    <nav>
+      <ul class="space-y-2 text-sm">
+          {articleTitle && (
+            <li class="ml-0 font-semibold leading-relaxed">
+              <a
+                href="#"
+                class="toc-link transition-colors block"
+                data-toc-link
+                data-slug="article-title"
+                onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' })"
+              >
+                <Marquee text="大纲" tag="div" duration={3} maskColor="var(--color-card)" />
+              </a>
+            </li>
+          )}
+          {tocHeadings.map((heading) => (
+            <li 
+              class:list={[
+                "leading-relaxed",
+                heading.depth === 1 && "ml-0 font-semibold",
+                heading.depth === 2 && "ml-2",
+                heading.depth === 3 && "ml-6",
+              ]}
+            >
+              <a
+                href={`#${heading.slug}`} 
+                class="toc-link transition-colors block"
+                data-toc-link
+                data-slug={heading.slug}
+              >
+                <Marquee text={heading.text} tag="div" duration={3} maskColor="var(--color-card)" />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+  </div>
+)}
+
+<script>
+  function highlightTOC() {
+    const links = document.querySelectorAll('[data-toc-link]')
+    if (!links.length) return
+
+    const articleTitle = document.getElementById('article-title')
+    const sectionHeadings = Array.from(document.querySelectorAll('h1[id], h2[id], h3[id]'))
+    const headings = articleTitle ? [articleTitle, ...sectionHeadings] : sectionHeadings
+    if (!headings.length) return
+
+    const mainEl = document.querySelector('main')
+    if (!mainEl) return
+
+    // 全页滚动模式，直接使用 window scroll
+    let ticking = false
+
+    function updateActive() {
+      const offset = 100
+      let activeIndex = 0
+
+      for (let i = 0; i < headings.length; i++) {
+        const rect = headings[i].getBoundingClientRect()
+        if (rect.top <= offset) {
+          activeIndex = i
+        } else {
+          break
+        }
+      }
+
+      const activeSlug = headings[activeIndex]?.id || ''
+      links.forEach(link => {
+        if (link.getAttribute('data-slug') === activeSlug) {
+          link.setAttribute('data-active', 'true')
+        } else {
+          link.removeAttribute('data-active')
+        }
+      })
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => { updateActive(); ticking = false })
+        ticking = true
+      }
+    }, { passive: true })
+
+    updateActive()
+  }
+
+  // 不再需要延迟等待 React hydrate
+  highlightTOC()
+  document.addEventListener('astro:page-load', highlightTOC)
+</script>

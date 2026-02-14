@@ -1,0 +1,17 @@
+---
+// TabItem 组件 - 每个选项卡的内容容器
+// 使用自定义标签名，在 Tabs 组件中通过 rehype 处理
+interface Props {
+  label: string;
+}
+
+const { label } = Astro.props;
+
+if (!label) {
+  throw new Error('Missing prop `label` on `<TabItem>` component.');
+}
+---
+
+<x-tab-item data-label={label}>
+  <slot />
+</x-tab-item>

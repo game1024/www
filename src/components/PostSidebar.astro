@@ -1,0 +1,94 @@
+---
+import { getCollection } from 'astro:content';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import Marquee from './Marquee.astro';
+
+export interface Props {
+  /** 当前文章 slug，用于高亮 */
+  currentSlug?: string;
+  /** 自定义类名 */
+  class?: string;
+}
+
+const {
+  currentSlug,
+  class: className,
+} = Astro.props;
+
+// 获取所有文章并按日期排序
+const allPosts = await getCollection('posts');
+const recentPosts = allPosts
+  .filter(post => !post.data.draft)
+  .sort((a, b) => b.data.createdAt.getTime() - a.data.createdAt.getTime())
+  .slice(0, 30);
+---
+
+<aside
+  class:list={[
+    "flex flex-col w-80 h-full bg-background border-r border-border overflow-y-auto",
+    className,
+  ]}
+>
+  <ScrollArea client:load className="h-full">
+    <div class="p-6">
+      <!-- 标题 -->
+      <div class="mb-4">
+        <h2 class="text-xl font-bold text-foreground mb-1">近期文章</h2>
+        <p class="text-sm text-muted-foreground">Recent Posts</p>
+      </div>
+
+      <!-- 文章列表 -->
+      <div class="space-y-1">
+        {recentPosts.map((post) => {
+          const isActive = currentSlug === post.slug;
+          return (
+            <a
+              href={`/posts/${post.slug}`}
+              class:list={[
+                "block py-1.5 px-2 rounded-md transition-all duration-200 group",
+                isActive
+                  ? "bg-primary/10 text-primary"
+                  : "hover:bg-muted"
+              ]}
+            >
+              <div class="overflow-hidden">
+                <Marquee
+                  text={post.data.title}
+                  tag="h3"
+                  class:list={[
+                    "text-sm font-medium",
+                    isActive ? "text-primary" : "text-foreground group-hover:text-foreground"
+                  ]}
+                  duration={3}
+                />
+              </div>
+              <div class="flex items-center gap-1.5 text-[11px] text-muted-foreground mt-0.5">
+                <time datetime={post.data.createdAt.toISOString()}>
+                  {post.data.createdAt.toLocaleDateString('zh-CN', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                  })}
+                </time>
+                {post.data.category && (
+                  <>
+                    <span>·</span>
+                    <span>{post.data.category}</span>
+                  </>
+                )}
+              </div>
+            </a>
+          );
+        })}
+      </div>
+
+      <!-- 查看更多 -->
+      <a
+        href="/archive"
+        class="mt-4 text-sm text-center text-primary hover:text-primary/80 transition-colors py-2 block"
+      >
+        查看全部文章 →
+      </a>
+    </div>
+  </ScrollArea>
+</aside>

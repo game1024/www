@@ -1,0 +1,143 @@
+/* 自定义容器样式 (:::note, :::tip 等) - 参考 fuwari */
+
+.custom-container {
+  margin: 1rem 0;
+  padding: 0 0 0 1rem;
+  border-left: 4px solid;
+  background: transparent;
+  position: relative;
+}
+
+.container-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: bold;
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+}
+
+.container-icon {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+  fill: currentColor;
+  mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  transform: translateY(-0.0625rem);
+}
+
+/* Note - 蓝色 */
+.custom-container.note {
+  border-color: oklch(0.7 0.14 250);
+}
+
+.dark .custom-container.note {
+  border-color: oklch(0.75 0.14 250);
+}
+
+.custom-container.note .container-title {
+  color: oklch(0.7 0.14 250);
+}
+
+.dark .custom-container.note .container-title {
+  color: oklch(0.75 0.14 250);
+}
+
+/* Tip - 青绿色 */
+.custom-container.tip {
+  border-color: oklch(0.7 0.14 180);
+}
+
+.dark .custom-container.tip {
+  border-color: oklch(0.75 0.14 180);
+}
+
+.custom-container.tip .container-title {
+  color: oklch(0.7 0.14 180);
+}
+
+.dark .custom-container.tip .container-title {
+  color: oklch(0.75 0.14 180);
+}
+
+/* Important - 紫色 */
+.custom-container.important {
+  border-color: oklch(0.7 0.14 310);
+}
+
+.dark .custom-container.important {
+  border-color: oklch(0.75 0.14 310);
+}
+
+.custom-container.important .container-title {
+  color: oklch(0.7 0.14 310);
+}
+
+.dark .custom-container.important .container-title {
+  color: oklch(0.75 0.14 310);
+}
+
+/* Warning - 黄色 */
+.custom-container.warning {
+  border-color: oklch(0.7 0.14 60);
+}
+
+.dark .custom-container.warning {
+  border-color: oklch(0.75 0.14 60);
+}
+
+.custom-container.warning .container-title {
+  color: oklch(0.7 0.14 60);
+}
+
+.dark .custom-container.warning .container-title {
+  color: oklch(0.75 0.14 60);
+}
+
+/* Caution - 红色 */
+.custom-container.caution {
+  border-color: oklch(0.6 0.2 25);
+}
+
+.dark .custom-container.caution {
+  border-color: oklch(0.65 0.2 25);
+}
+
+.custom-container.caution .container-title {
+  color: oklch(0.6 0.2 25);
+}
+
+.dark .custom-container.caution .container-title {
+  color: oklch(0.65 0.2 25);
+}
+
+/* 容器内的段落样式 */
+.custom-container p {
+  margin: 0.5rem 0;
+}
+
+.custom-container p:first-of-type {
+  margin-top: 0;
+}
+
+.custom-container p:last-child {
+  margin-bottom: 0;
+}
+
+/* 容器内的代码块样式 */
+.custom-container pre {
+  margin: 0.75rem 0;
+}
+
+.custom-container :not(pre) > code {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+  font-size: 0.9em;
+}
+
+.dark .custom-container :not(pre) > code {
+  background: rgba(255, 255, 255, 0.1);
+}

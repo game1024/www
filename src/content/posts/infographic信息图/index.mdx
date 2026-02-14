@@ -1,0 +1,221 @@
+---
+title: "infographic信息图"
+description: ""
+createdAt: 2026-02-14 12:06
+updatedAt: 2026-02-14 12:06
+category: "备忘"
+tags: ["备忘", "infographic"]
+---
+
+最近总算是将`@antv/infographic`信息图成功集成到博客系统了 
+
+正好写篇文章记录一下各种图的语法，方便自己以后查阅~
+
+:::tip
+在组件右上角可以点击查看源码按钮，查看绘图的代码
+:::
+
+# 条形图
+
+## 横向条形图
+在比对业务数据的时候，可以使用条形图
+
+```infographic 
+infographic chart-bar-plain-text
+data
+  title 年度营收增长
+  desc 展示近三年及本年目标营收对比（单位：亿元）
+  values
+    - label 2021年
+      value 120
+      desc 转型初期，稳步试水
+      icon lucide/sprout
+    - label 2022年
+      value 150
+      desc 平台优化，效率显著提升
+      icon lucide/zap
+    - label 2023年
+      value 190
+      desc 深化数智融合，全面增长
+      icon lucide/brain-circuit
+    - label 2024年
+      value 240
+      desc 拓展生态协同，冲击新高
+      icon lucide/trophy
+```
+
+## 竖向条形图
+如果想要竖向的条形图，可以声明`chart-column-simple`
+```infographic
+infographic chart-column-simple
+data
+  title 年度营收增长
+  desc 展示近三年及本年目标营收对比（单位：亿元）
+  values
+    - label 2021年
+      value 120
+      desc 转型初期
+      icon lucide/sprout
+    - label 2022年
+      value 150
+      desc 平台优化
+      icon lucide/zap
+    - label 2023年
+      value 190
+      desc 数智融合
+      icon lucide/brain-circuit
+    - label 2024年
+      value 240
+      desc 生态协同
+      icon lucide/trophy
+```
+
+# 折线图
+如果想要体现业务数据的上升或者下降趋势变化
+
+```infographic
+infographic chart-line-plain-text
+data
+  title 年度营收增长
+  desc 展示近三年及本年目标营收对比（单位：亿元）
+  values
+    - label 2021年
+      value 120
+      desc 转型初期，稳步试水
+      icon lucide/sprout
+    - label 2022年
+      value 150
+      desc 平台优化，效率显著提升
+      icon lucide/zap
+    - label 2023年
+      value 190
+      desc 深化数智融合，全面增长
+      icon lucide/brain-circuit
+    - label 2024年
+      value 240
+      desc 拓展生态协同，冲击新高
+      icon lucide/trophy
+```
+
+# 饼图
+如果想要展示数据占比，通常我们会使用饼图
+```infographic
+infographic chart-pie-compact-card
+data
+  title 年度营收增长
+  desc 展示近三年及本年目标营收对比（单位：亿元）
+  values
+    - label 2021年
+      value 120
+      desc 转型初期，稳步试水
+      icon lucide/sprout
+    - label 2022年
+      value 150
+      desc 平台优化，效率显著提升
+      icon lucide/zap
+    - label 2023年
+      value 190
+      desc 深化数智融合，全面增长
+      icon lucide/brain-circuit
+    - label 2024年
+      value 240
+      desc 拓展生态协同，冲击新高
+      icon lucide/trophy
+
+```
+
+# 对比图
+对比图主要在强调两个方案之间的特性时使用
+```infographic
+infographic compare-hierarchy-left-right-circle-node-pill-badge
+data
+  title 竞品分析
+  desc 通过对比分析，找出差距，明确改进方向
+  compares
+    - label 产品分析
+      children
+        - label 架构升级
+          desc 品牌营销策略就是以品牌输出为核心的营销策略
+        - label 架构升级
+          desc 品牌营销策略就是以品牌输出为核心的营销策略
+        - label 架构升级
+          desc 品牌营销策略就是以品牌输出为核心的营销策略
+    - label 竞品分析
+      children
+        - label 架构升级
+          desc 品牌营销策略就是以品牌输出为核心的营销策略
+        - label 架构升级
+          desc 品牌营销策略就是以品牌输出为核心的营销策略
+        - label 架构升级
+          desc 品牌营销策略就是以品牌输出为核心的营销策略
+```
+
+```infographic
+infographic compare-hierarchy-row-letter-card-compact-card
+data
+  title 竞品分析
+  desc 通过对比分析，找出差距，明确改进方向
+  compares
+    - label 产品分析
+      children
+        - label 架构升级
+          desc 品牌营销策略就是以品牌输出为核心的营销策略
+        - label 架构升级
+          desc 品牌营销策略就是以品牌输出为核心的营销策略
+        - label 架构升级
+          desc 品牌营销策略就是以品牌输出为核心的营销策略
+    - label 竞品分析
+      children
+        - label 架构升级
+          desc 品牌营销策略就是以品牌输出为核心的营销策略
+        - label 架构升级
+          desc 品牌营销策略就是以品牌输出为核心的营销策略
+        - label 架构升级
+          desc 品牌营销策略就是以品牌输出为核心的营销策略
+```
+
+# 之型图
+
+```infographic
+infographic sequence-zigzag-pucks-3d-underline-text
+data
+  title 企业优势列表
+  desc 展示企业在不同维度上的核心优势与表现值
+  sequences
+    - label 品牌影响力
+      value 85
+      desc 用户群中具备较强认知与信任度
+      time 2021
+      icon mingcute/diamond-2-fill
+      illus creative-experiment
+    - label 技术研发力
+      value 90
+      desc 拥有自研系统与创新能力
+      time 2022
+      icon mingcute/code-fill
+      illus code-thinking
+    - label 市场增长快
+      value 78
+      desc 近一年用户规模实现快速增长
+      time 2023
+      icon mingcute/wallet-4-line
+      illus business-analytics
+    - label 服务满意度
+      value 88
+      desc 用户对服务体系整体评分较高
+      time 2020
+      icon mingcute/happy-line
+      illus feeling-happy
+    - label 数据资产全
+      value 92
+      desc 构建了完整用户标签与画像体系
+      time 2022
+      icon mingcute/user-4-line
+      illus mobile-photos
+    - label 创新能力强
+      value 83
+      desc 新产品上线频率高于行业平均
+      time 2023
+      icon mingcute/rocket-line
+      illus creativity
+```

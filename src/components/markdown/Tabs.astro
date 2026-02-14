@@ -1,0 +1,128 @@
+---
+// Tabs 组件 - 参考 Starlight 实现
+// 使用 Astro 组件 + Web Component (自定义元素) 做交互
+// 完全不用 React，避免 Context 断裂问题
+
+const panelHtml = await Astro.slots.render('default');
+
+// 解析 TabItem 内容
+import { parse } from 'node-html-parser';
+
+const root = parse(panelHtml);
+const tabItems = root.querySelectorAll('x-tab-item');
+
+interface Panel {
+  label: string;
+  panelId: string;
+  tabId: string;
+  content: string;
+}
+
+const panels: Panel[] = tabItems.map((item, idx) => ({
+  label: item.getAttribute('data-label') || `Tab ${idx + 1}`,
+  panelId: `tab-panel-${idx}`,
+  tabId: `tab-${idx}`,
+  content: item.innerHTML,
+}));
+---
+
+<x-tabs>
+  <div class="tablist-wrapper">
+    <div class="tab-list" role="tablist">
+      {panels.map((panel, idx) => (
+        <button
+          role="tab"
+          id={panel.tabId}
+          aria-selected={idx === 0 ? 'true' : 'false'}
+          aria-controls={panel.panelId}
+          tabindex={idx !== 0 ? -1 : 0}
+        >
+          {panel.label}
+        </button>
+      ))}
+    </div>
+  </div>
+  {panels.map((panel, idx) => (
+    <div
+      role="tabpanel"
+      id={panel.panelId}
+      aria-labelledby={panel.tabId}
+      hidden={idx !== 0}
+    >
+      <Fragment set:html={panel.content} />
+    </div>
+  ))}
+</blog-tabs>
+
+<script>
+  class XTabs extends HTMLElement {
+    constructor() {
+      super();
+    }
+
+    connectedCallback() {
+      const tabs = this.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+      const panels = this.querySelectorAll<HTMLDivElement>('[role="tabpanel"]');
+
+      tabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          this.switchTab(tab, tabs, panels);
+        });
+
+        tab.addEventListener('keydown', (e) => {
+          const tabArray = Array.from(tabs);
+          const currentIdx = tabArray.indexOf(tab);
+          let newIdx: number | null = null;
+
+          if (e.key === 'ArrowRight') {
+            newIdx = (currentIdx + 1) % tabArray.length;
+          } else if (e.key === 'ArrowLeft') {
+            newIdx = (currentIdx - 1 + tabArray.length) % tabArray.length;
+          } else if (e.key === 'Home') {
+            newIdx = 0;
+          } else if (e.key === 'End') {
+            newIdx = tabArray.length - 1;
+          }
+
+          if (newIdx !== null) {
+            e.preventDefault();
+            this.switchTab(tabArray[newIdx]!, tabs, panels);
+            tabArray[newIdx]!.focus();
+          }
+        });
+      });
+    }
+
+    switchTab(
+      newTab: HTMLButtonElement,
+      tabs: NodeListOf<HTMLButtonElement>,
+      panels: NodeListOf<HTMLDivElement>
+    ) {
+      tabs.forEach((tab) => {
+        tab.setAttribute('aria-selected', 'false');
+        tab.setAttribute('tabindex', '-1');
+      });
+
+      panels.forEach((panel) => {
+        panel.hidden = true;
+      });
+
+      newTab.setAttribute('aria-selected', 'true');
+      newTab.removeAttribute('tabindex');
+
+      const panelId = newTab.getAttribute('aria-controls');
+      if (panelId) {
+        const panel = this.querySelector(`#${panelId}`) as HTMLDivElement;
+        if (panel) panel.hidden = false;
+      }
+    }
+  }
+
+  if (!customElements.get('x-tabs')) {
+    customElements.define('x-tabs', XTabs);
+  }
+</script>
+
+<style is:global>
+  /* Tabs 样式已迁移至 global.css */
+</style>

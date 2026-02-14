@@ -1,0 +1,133 @@
+---
+import { Image } from "astro:assets";
+import "../styles/global.css";
+import HomeHeader from "@/components/HomeHeader.astro";
+import PostSidebar from "@/components/PostSidebar.astro";
+import PostLicense from "@/components/PostLicense.astro";
+import PostComment from "@/components/PostComment.astro";
+import PostToolbar from "@/components/PostToolbar.astro";
+
+export interface Props {
+    /** 页面标题 */
+    title?: string;
+    /** 页面描述 */
+    description?: string;
+    /** 作者名称 */
+    authorName?: string;
+    /** 当前文章 slug */
+    currentSlug?: string;
+    /** 发表日期 */
+    createdAt?: Date;
+    /** 最后更新 */
+    updatedAt?: Date;
+    /** 封面图 */
+    cover?: ImageMetadata;
+    /** 自定义类名 */
+    class?: string;
+}
+
+const {
+    title,
+    description,
+    authorName = "作者",
+    currentSlug,
+    createdAt,
+    updatedAt,
+    cover,
+    class: className,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-CN" data-theme="github-light">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css" integrity="sha384-zh0CIslj+VczCZtlzBcjt5ppRcsAmDnRem7ESsYwWwg3m/OaJ2l4x7YBZl9Kxxib" crossorigin="anonymous" />
+        <meta name="generator" content={Astro.generator} />
+        <script is:inline>
+            // 同步主题
+            const savedTheme = localStorage.getItem("theme");
+            const isDark =
+                savedTheme === "dark" ||
+                (!savedTheme &&
+                    window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+            if (isDark) {
+                document.documentElement.classList.add("dark");
+                document.documentElement.setAttribute(
+                    "data-theme",
+                    "github-dark",
+                );
+            } else {
+                document.documentElement.classList.remove("dark");
+                document.documentElement.setAttribute(
+                    "data-theme",
+                    "github-light",
+                );
+            }
+        </script>
+        {title && <title>{title}</title>}
+        {description && <meta name="description" content={description} />}
+    </head>
+    <body class="min-h-screen">
+        <script src="../scripts/tabs-init.js"></script>
+        <script src="../scripts/file-tree-init.js"></script>
+        <!-- Header -->
+        <HomeHeader authorName={authorName} />
+
+        <!-- Main Layout: Sidebar + Content -->
+        <div class="flex">
+            <!-- Sidebar (hidden on mobile) -->
+            <div class="hidden xl:block sticky top-16 h-[calc(100vh-4rem)] shrink-0 transition-[top,height] duration-300" data-stick-to-header>
+                <PostSidebar currentSlug={currentSlug} />
+            </div>
+
+            <!-- Main Content -->
+            <div class="flex flex-1 min-w-0">
+                <main
+                    class:list={[
+                        "mx-auto max-w-[52rem] px-4 md:px-6 lg:px-8 py-8 flex-1 min-w-0",
+                        className,
+                    ]}
+                >
+                    {cover && (
+                        <div class="mb-6 rounded-lg overflow-hidden bg-muted">
+                            <Image
+                                src={cover}
+                                alt={title || "封面图"}
+                                width={832}
+                                height={468}
+                                class="w-full aspect-video object-cover"
+                            />
+                        </div>
+                    )}
+                    <slot />
+                    <PostLicense title={title || "未命名文章"} createdAt={createdAt} updatedAt={updatedAt}/>
+                    <PostComment />
+                    <PostToolbar />
+                </main>
+
+                <!-- TOC Sidebar -->
+                <div class="hidden lg:block w-80 xl:w-96 shrink-0 border-l border-border">
+                    <div class="sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto toc-scroll-area transition-[top,height] duration-300" data-stick-to-header>
+                        <slot name="toc" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script is:inline>
+            // 刷新时保持滚动位置
+            const key = 'scroll:' + location.pathname;
+            const saved = sessionStorage.getItem(key);
+            if (saved && !location.hash) {
+                window.scrollTo(0, parseInt(saved));
+            }
+            window.addEventListener('beforeunload', function() {
+                sessionStorage.setItem(key, window.scrollY.toString());
+            });
+        </script>
+    </body>
+</html>

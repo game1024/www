@@ -1,0 +1,146 @@
+---
+// FileTree 组件 - 参考 Starlight 实现
+// Astro 组件处理 slot HTML + Web Component 处理交互
+// 使用 vscode-icons 图标（通过 Iconify CDN）
+
+const html = await Astro.slots.render('default');
+
+import { parse, type HTMLElement as NHPElement } from 'node-html-parser';
+import { file2icon, file2iconPair } from '@/lib/file-icons';
+
+// Iconify CDN 图标 URL
+function iconUrl(icon: string): string {
+  const [prefix, name] = icon.split(':');
+  return `https://api.iconify.design/${prefix}/${name}.svg`;
+}
+
+function iconImg(iconName: string, extraClass?: string): string {
+  const cls = extraClass ? `ft-icon ${extraClass}` : 'ft-icon';
+  return `<img class="${cls}" src="${iconUrl(iconName)}" alt="" width="16" height="16" loading="lazy" decoding="async" />`;
+}
+
+// 主题感知文件图标（可能输出两个 img）
+function fileIconImgs(fileName: string): string {
+  const pair = file2iconPair(fileName);
+  if (pair) {
+    return iconImg(pair.light, 'ft-themed-light') + iconImg(pair.dark, 'ft-themed-dark');
+  }
+  return iconImg(file2icon(fileName));
+}
+
+const FOLDER_OPEN_URL = iconUrl('vscode-icons:default-folder-opened');
+const FOLDER_CLOSED_URL = iconUrl('vscode-icons:default-folder');
+
+// 获取直接子元素（node-html-parser 的 :scope 不可靠）
+function directChildren(el: NHPElement, tag: string): NHPElement[] {
+  return el.childNodes.filter(
+    (n): n is NHPElement => (n as NHPElement).tagName?.toLowerCase() === tag
+  );
+}
+
+// 递归处理
+function processTree(root: NHPElement): string {
+  const ul = root.querySelector('ul');
+  if (!ul) return '<ul class="ft-list"></ul>';
+  return processUl(ul);
+}
+
+function processUl(ul: NHPElement): string {
+  const items = directChildren(ul, 'li');
+  let out = '<ul class="ft-list" role="group">';
+  for (const li of items) {
+    out += processLi(li);
+  }
+  out += '</ul>';
+  return out;
+}
+
+function processLi(li: NHPElement): string {
+  // 找直接子 ul（目录内容）
+  const childUls = directChildren(li, 'ul');
+  const childUl = childUls.length > 0 ? childUls[0] : null;
+
+  // 拼接非 ul 的文本内容
+  let rawText = '';
+  for (const child of li.childNodes) {
+    if ((child as NHPElement).tagName?.toLowerCase() === 'ul') continue;
+    // rawText 或 outerHTML
+    rawText += (child as NHPElement).outerHTML ?? (child as any).rawText ?? '';
+  }
+  rawText = rawText.trim();
+
+  // 纯文字（去 HTML 标签）
+  const plain = rawText.replace(/<[^>]*>/g, '').trim();
+
+  const isHighlighted = rawText.startsWith('<strong>') || rawText.startsWith('<b>');
+  const isPlaceholder = /^(\.{3}|…)$/.test(plain);
+  const isDirectory = !!childUl || plain.endsWith('/');
+
+  // 文件名 & 注释
+  let fileName = plain;
+  let comment = '';
+  if (isDirectory && fileName.endsWith('/')) fileName = fileName.slice(0, -1);
+
+  const sp = fileName.indexOf(' ');
+  if (sp > 0 && !isPlaceholder) {
+    comment = fileName.slice(sp + 1);
+    fileName = fileName.slice(0, sp);
+  }
+
+  // ── 占位符 ──
+  if (isPlaceholder) {
+    return '<li class="ft-item ft-placeholder"><span class="ft-entry"><span class="ft-name">…</span></span></li>';
+  }
+
+  const hlClass = isHighlighted ? ' ft-highlight' : '';
+  const commentHtml = comment ? `<span class="ft-comment">${comment}</span>` : '';
+
+  // ── 目录 ──
+  if (isDirectory) {
+    const childHtml = childUl
+      ? processUl(childUl)
+      : '<ul class="ft-list" role="group"><li class="ft-item ft-placeholder"><span class="ft-entry"><span class="ft-name">…</span></span></li></ul>';
+
+    // 用 data-src-open / data-src-closed 存 URL，由 JS 切换
+    return `<li class="ft-item ft-directory"><details open><summary class="ft-entry"><span class="ft-chevron"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M13.1717 12.0007L8.22192 7.05093L9.63614 5.63672L16.0001 12.0007L9.63614 18.3646L8.22192 16.9504L13.1717 12.0007Z"/></svg></span><img class="ft-icon ft-dir-icon" src="${FOLDER_OPEN_URL}" data-src-open="${FOLDER_OPEN_URL}" data-src-closed="${FOLDER_CLOSED_URL}" alt="" width="16" height="16" /><span class="ft-name${hlClass}">${fileName}</span>${commentHtml}</summary>${childHtml}</details></li>`;
+  }
+
+  // ── 文件 ──
+  const fIcon = fileIconImgs(fileName);
+  return `<li class="ft-item ft-file"><span class="ft-entry">${fIcon}<span class="ft-name${hlClass}">${fileName}</span>${commentHtml}</span></li>`;
+}
+
+const processedHtml = processTree(parse(html));
+---
+
+<x-file-tree>
+  <Fragment set:html={processedHtml} />
+</x-file-tree>
+
+<script>
+  class XFileTree extends HTMLElement {
+    connectedCallback() {
+      this.querySelectorAll('details').forEach((details) => {
+        const icon = details.querySelector<HTMLImageElement>('.ft-dir-icon');
+        if (!icon) return;
+
+        const update = () => {
+          const src = details.open
+            ? icon.dataset.srcOpen
+            : icon.dataset.srcClosed;
+          if (src) icon.src = src;
+        };
+
+        details.addEventListener('toggle', update);
+      });
+    }
+  }
+
+  if (!customElements.get('x-file-tree')) {
+    customElements.define('x-file-tree', XFileTree);
+  }
+</script>
+
+<style is:global>
+  /* 样式已迁移至 global.css */
+</style>

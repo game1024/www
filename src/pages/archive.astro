@@ -1,0 +1,66 @@
+---
+import HomeLayout from "@/layouts/HomeLayout.astro"
+import { getCollection } from "astro:content"
+import { Icon } from "astro-icon/components"
+
+const allPosts = (await getCollection("posts"))
+  .filter(p => !p.data.draft)
+  .sort((a, b) => b.data.createdAt.getTime() - a.data.createdAt.getTime());
+
+// 按年份分组
+const postsByYear = new Map<number, typeof allPosts>();
+for (const post of allPosts) {
+  const year = post.data.createdAt.getFullYear();
+  if (!postsByYear.has(year)) postsByYear.set(year, []);
+  postsByYear.get(year)!.push(post);
+}
+
+const sortedYears = [...postsByYear.keys()].sort((a, b) => b - a);
+---
+
+<HomeLayout
+  title="归档 - Game1024の博客"
+  description="所有文章归档"
+  authorName="Game1024"
+>
+  <div class="space-y-8">
+    <div class="flex items-center gap-3">
+      <Icon name="ri:archive-fill" class="size-6 text-primary" />
+      <h1 class="text-2xl font-bold">归档</h1>
+      <span class="text-sm text-muted-foreground">共 {allPosts.length} 篇文章</span>
+    </div>
+
+    {sortedYears.map(year => (
+      <div class="space-y-3">
+        <h2 class="text-lg font-semibold text-foreground flex items-center gap-2">
+          <Icon name="ri:calendar-line" class="size-5 text-muted-foreground" />
+          {year} 年
+          <span class="text-sm font-normal text-muted-foreground">({postsByYear.get(year)!.length} 篇)</span>
+        </h2>
+
+        <div class="ml-2 border-l-2 border-border pl-4 space-y-3">
+          {postsByYear.get(year)!.map(post => (
+            <div class="relative">
+              <div class="absolute -left-[1.35rem] top-2 w-2.5 h-2.5 rounded-full bg-primary/60 border-2 border-background" />
+              <a href={`/posts/${post.slug}`} class="group block">
+                <div class="flex items-baseline gap-3">
+                  <time class="text-xs text-muted-foreground tabular-nums shrink-0" datetime={post.data.createdAt.toISOString()}>
+                    {post.data.createdAt.toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' })}
+                  </time>
+                  {post.data.category && (
+                    <span class="text-[11px] text-muted-foreground shrink-0">
+                      [{post.data.category}]
+                    </span>
+                  )}
+                  <span class="text-sm font-semibold text-foreground group-hover:text-primary group-hover:underline decoration-primary/40 decoration-2 underline-offset-4 transition-colors truncate">
+                    {post.data.title}
+                  </span>
+                </div>
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</HomeLayout>

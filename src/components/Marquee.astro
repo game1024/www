@@ -1,0 +1,139 @@
+---
+export interface Props {
+  /** 标题文本 */
+  text: string
+  /** 标签类型 */
+  tag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "div"
+  /** 自定义类名 */
+  class?: string
+  /** 滚动持续时间（秒），默认 2 */
+  duration?: number
+  /** 遮罩背景颜色，默认使用主题背景色 */
+  maskColor?: string
+}
+
+const { 
+  text, 
+  tag: Tag = "h1", 
+  class: className = "",
+  duration = 2,
+  maskColor
+} = Astro.props
+---
+
+<marquee-text 
+  data-duration={duration} 
+  class={className}
+  style={maskColor ? `--marquee-mask-color: ${maskColor}` : undefined}
+>
+  <Tag class="inline-block whitespace-nowrap">
+    {text}
+  </Tag>
+</marquee-text>
+
+<script>
+  class MarqueeText extends HTMLElement {
+    private textElement: HTMLElement | null = null
+    private maskElement: HTMLDivElement | null = null
+    private resizeObserver: ResizeObserver | null = null
+
+    connectedCallback() {
+      this.classList.add('marquee-container')
+      
+      // 获取文本元素
+      this.textElement = this.querySelector('h1, h2, h3, h4, h5, h6, div')
+      
+      if (!this.textElement) return
+
+      this.textElement.classList.add('marquee-text')
+      
+      // 创建遮罩层
+      this.maskElement = document.createElement('div')
+      this.maskElement.className = 'marquee-mask'
+      this.appendChild(this.maskElement)
+      
+      // 设置滚动时长
+      const duration = this.dataset.duration || '2'
+      this.style.setProperty('--scroll-duration', `${duration}s`)
+      
+      // 检查溢出
+      this.checkOverflow()
+      
+      // 监听尺寸变化
+      this.resizeObserver = new ResizeObserver(() => {
+        this.checkOverflow()
+      })
+      
+      this.resizeObserver.observe(this)
+      if (this.textElement) {
+        this.resizeObserver.observe(this.textElement)
+      }
+    }
+
+    disconnectedCallback() {
+      this.resizeObserver?.disconnect()
+    }
+
+    private checkOverflow() {
+      if (!this.textElement) return
+      
+      const containerWidth = this.clientWidth
+      const textWidth = this.textElement.scrollWidth
+      
+      if (textWidth > containerWidth) {
+        this.classList.add('is-overflow')
+        const scrollDistance = textWidth - containerWidth
+        this.style.setProperty('--scroll-distance', `-${scrollDistance}px`)
+      } else {
+        this.classList.remove('is-overflow')
+      }
+    }
+  }
+
+  if (!customElements.get('marquee-text')) {
+    customElements.define('marquee-text', MarqueeText)
+  }
+</script>
+
+<style is:global>
+  .marquee-container {
+    position: relative;
+    overflow: hidden;
+    display: block;
+  }
+
+  .marquee-text {
+    transition: transform 0s linear;
+  }
+
+  .marquee-mask {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 7.5rem;
+    background: linear-gradient(
+      to left, 
+      var(--marquee-mask-color, var(--color-background)) 0%, 
+      var(--marquee-mask-color, var(--color-background)) 5%, 
+      transparent 100%
+    );
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    filter: drop-shadow(-8px 0px 12px var(--marquee-mask-color, var(--color-background)));
+  }
+
+  .marquee-container.is-overflow .marquee-mask {
+    opacity: 1;
+  }
+
+  .marquee-container.is-overflow:hover .marquee-mask {
+    opacity: 0;
+  }
+
+  .marquee-container.is-overflow:hover .marquee-text {
+    transform: translateX(var(--scroll-distance));
+    transition-duration: var(--scroll-duration);
+  }
+</style>

@@ -1,0 +1,59 @@
+---
+import HomeLayout from "@/layouts/HomeLayout.astro"
+import { getCollection } from "astro:content"
+import { Icon } from "astro-icon/components"
+
+const allPosts = (await getCollection("posts"))
+  .filter(p => !p.data.draft)
+  .sort((a, b) => b.data.createdAt.getTime() - a.data.createdAt.getTime());
+
+// 按标签分组
+const postsByTag = new Map<string, typeof allPosts>();
+for (const post of allPosts) {
+  for (const tag of post.data.tags || []) {
+    if (!postsByTag.has(tag)) postsByTag.set(tag, []);
+    postsByTag.get(tag)!.push(post);
+  }
+}
+
+// 按文章数量排序
+const sortedTags = [...postsByTag.entries()]
+  .sort((a, b) => b[1].length - a[1].length);
+
+const maxCount = sortedTags.length > 0 ? sortedTags[0][1].length : 1;
+---
+
+<HomeLayout
+  title="标签 - Game1024の博客"
+  description="文章标签"
+  authorName="Game1024"
+>
+  <div class="space-y-8">
+    <div class="flex items-center gap-3">
+      <Icon name="ri:price-tag-3-fill" class="size-6 text-primary" />
+      <h1 class="text-2xl font-bold">标签</h1>
+      <span class="text-sm text-muted-foreground">共 {sortedTags.length} 个标签</span>
+    </div>
+
+    {/* 标签云 */}
+    <div class="flex flex-wrap gap-2">
+      {sortedTags.map(([tag, posts]) => {
+        const ratio = posts.length / maxCount;
+        const sizeClass = ratio > 0.7 ? "text-lg px-3 py-1.5" : ratio > 0.4 ? "text-base px-2.5 py-1" : "text-sm px-2 py-0.5";
+        return (
+          <a
+            href={`/tags/${encodeURIComponent(tag)}`}
+            class:list={[
+              "inline-flex items-center gap-1 rounded-full border border-border bg-card hover:bg-muted hover:border-primary/30 transition-all",
+              sizeClass,
+            ]}
+          >
+            <Icon name="ri:hashtag" class="size-3.5 text-muted-foreground" />
+            <span class="text-foreground">{tag}</span>
+            <span class="text-muted-foreground text-xs">({posts.length})</span>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+</HomeLayout>

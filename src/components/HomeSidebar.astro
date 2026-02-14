@@ -1,0 +1,132 @@
+---
+import { Icon } from "astro-icon/components";
+import { SidebarAvatar } from "@/components/ui/sidebar-avatar";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
+export interface Props {
+    /** 自定义类名 */
+    class?: string;
+}
+
+const avatarSrc = "/avatar.webp";
+const avatarFallback = "G";
+const username = "Game1024";
+const description = "看到的越多，知道的越少";
+const bilibili = "https://space.bilibili.com/426988409";
+const github = "https://github.com/game1024";
+const rss = "https://gm1024.com/rss.xml";
+
+const {
+    class: className,
+} = Astro.props;
+
+const socialLinks = [
+    { icon: "ri:bilibili-fill", href: bilibili, label: "Bilibili" },
+    { icon: "ri:github-fill", href: github, label: "GitHub" },
+    //{ icon: "ri:discord-fill", href: discord, label: "Discord" },
+    //{ icon: "ri:twitter-x-fill", href: x, label: "X (Twitter)" },
+    //{ icon: "ri:telegram-fill", href: telegram, label: "Telegram" },
+    //{ icon: "ri:steam-fill", href: steam, label: "Steam" },
+    { icon: "ri:rss-fill", href: rss, label: "RSS" },
+].filter((link) => link.href);
+
+const navItems = [
+    { icon: "ri:home-fill", href: "/", label: "首页" },
+    { icon: "ri:stack-fill", href: "/categories", label: "分类" },
+    { icon: "ri:price-tag-3-fill", href: "/tags", label: "标签" },
+    { icon: "ri:user-fill", href: "/about", label: "关于" },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<aside
+    class:list={[
+        "w-72 h-full",
+        "bg-background border-r border-border",
+        className,
+    ]}
+>
+  <ScrollArea client:load className="h-full">
+    <div class="flex flex-col items-center gap-6 p-6">
+    <!-- 头像区域 -->
+    <div class="flex flex-col items-center gap-3">
+        <SidebarAvatar
+            client:load
+            src={avatarSrc}
+            fallback={avatarFallback}
+            alt={username || "User"}
+        />
+        {
+            username && (
+                <h2 class="text-lg font-semibold text-foreground">
+                    {username}
+                </h2>
+            )
+        }
+        {
+            description && (
+                <p class="text-sm text-muted-foreground text-center">
+                    {description}
+                </p>
+            )
+        }
+    </div>
+
+    <!-- 社交链接区域 - 一行三列 -->
+    {
+        socialLinks.length > 0 && (
+            <div class="w-full">
+                <div class="grid grid-cols-3 gap-2 px-12 justify-items-center">
+                    {socialLinks.map((link) => (
+                        <a
+                            href={link.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={link.label}
+                            class="flex items-center justify-center size-10 rounded-lg text-muted-foreground hover:text-foreground bg-muted/50 hover:bg-muted transition-all duration-200 hover:scale-105"
+                        >
+                            <Icon name={link.icon} class="size-5" />
+                        </a>
+                    ))}
+                </div>
+            </div>
+        )
+    }
+
+    <!-- 分割线 -->
+    {socialLinks.length > 0 && <div class="w-full h-px bg-border" />}
+
+    <!-- 导航菜单 -->
+    <nav class="w-full space-y-1 px-4">
+        {
+            navItems.map((item) => {
+                const isActive =
+                    currentPath === item.href ||
+                    (item.href !== "/" && currentPath.startsWith(item.href));
+
+                return (
+                    <a
+                        href={item.href}
+                        class:list={[
+                            "flex items-center justify-center gap-3 mx-8 px-4 py-2.5 rounded-lg transition-colors",
+                            isActive
+                                ? "bg-primary text-primary-foreground"
+                                : "text-foreground hover:bg-muted",
+                        ]}
+                    >
+                        <Icon name={item.icon} class="size-4" />
+                        <span>{item.label}</span>
+                    </a>
+                );
+            })
+        }
+    </nav>
+
+    <!-- 额外内容区域 (slot) -->
+    <div class="w-full flex-1">
+        <slot />
+    </div>
+    </div>
+  </ScrollArea>
+</aside>
