@@ -74,7 +74,7 @@ export function XInfographic({ syntax }: InfographicBlockProps) {
     return (
         <>
             <div className="x-infographic my-2 rounded-lg border border-border overflow-hidden min-h-[200px] relative group">
-                <div className="absolute top-2 right-2 z-10 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="absolute top-2 right-2 z-10 flex gap-1 opacity-0 group-hover:opacity-100 max-lg:opacity-100 transition-opacity">
                     <Button
                         variant="outline"
                         size="icon-xs"

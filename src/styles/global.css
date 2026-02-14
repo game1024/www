@@ -411,6 +411,19 @@ html::-webkit-scrollbar-thumb {
   opacity: 1;
 }
 
+/* 触摸设备上始终显示工具栏 */
+@media (max-width: 1024px) {
+  .diagram-toolbar {
+    opacity: 1;
+  }
+}
+
+@media (hover: none) {
+  .diagram-toolbar {
+    opacity: 1;
+  }
+}
+
 .diagram-toolbar button {
   display: inline-flex;
   align-items: center;
