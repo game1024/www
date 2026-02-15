@@ -3,6 +3,8 @@
  * 
  * 例如 ```cpp title="main.cpp"
  * 会在 <pre> 上添加 data-title="main.cpp"
+ * 
+ * 行高亮语法：{1,4} 或 {1-3,5,7-9}
  */
 import { visit } from 'unist-util-visit';
 
@@ -38,6 +40,23 @@ export default function rehypeCodeMeta() {
       if (collapseMatch) {
         node.properties = node.properties || {};
         node.properties['data-collapse'] = collapseMatch[1] !== 'false' ? 'true' : 'false';
+      }
+
+      // 提取行高亮 {1,3-5,7}
+      const highlightMatch = meta.match(/\{([\d,\s-]+)\}/);
+      if (highlightMatch) {
+        node.properties = node.properties || {};
+        node.properties['data-highlight-lines'] = highlightMatch[1].replace(/\s/g, '');
+      }
+
+      // 提取关键词高亮 mark=/regex/ 或 mark=/regex/flags
+      const markMatch = meta.match(/mark\s*=\s*\/((?:[^/\\]|\\.)*)\/([gimsuy]*)/);
+      if (markMatch) {
+        node.properties = node.properties || {};
+        node.properties['data-mark'] = markMatch[1];
+        if (markMatch[2]) {
+          node.properties['data-mark-flags'] = markMatch[2];
+        }
       }
     });
   };

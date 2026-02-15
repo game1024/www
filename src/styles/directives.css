@@ -141,3 +141,81 @@
 .dark .custom-container :not(pre) > code {
   background: rgba(255, 255, 255, 0.1);
 }
+
+/* ── GitHub Repo Card ─────────────────────── */
+.github-card {
+  display: block;
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  max-width: 480px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+  color: var(--foreground);
+  text-decoration: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.github-card:hover {
+  border-color: var(--muted-foreground);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.dark .github-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.github-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.github-card-icon {
+  flex-shrink: 0;
+  color: var(--muted-foreground);
+}
+
+.github-card-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--foreground);
+  word-break: break-all;
+}
+
+.github-card-desc {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--muted-foreground);
+}
+
+.github-card-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.github-card-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+.github-card-stat svg {
+  flex-shrink: 0;
+  color: var(--muted-foreground);
+}
+
+.github-card-lang-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}

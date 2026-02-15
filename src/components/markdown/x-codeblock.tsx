@@ -12,9 +12,33 @@ export interface CodeBlockProps {
   title?: string;
   frame?: boolean;
   collapse?: boolean;
+  highlightLines?: string;
+  mark?: string;
+  markFlags?: string;
 }
 
-export function XCodeBlock({ code, language, title, frame, collapse }: CodeBlockProps) {
+/**
+ * 解析行高亮语法，如 "1,3-5,7" -> Set {1,3,4,5,7}
+ */
+function parseHighlightLines(raw?: string): Set<number> {
+  const set = new Set<number>();
+  if (!raw) return set;
+  for (const part of raw.split(',')) {
+    const trimmed = part.trim();
+    if (trimmed.includes('-')) {
+      const [start, end] = trimmed.split('-').map(Number);
+      if (!isNaN(start) && !isNaN(end)) {
+        for (let i = start; i <= end; i++) set.add(i);
+      }
+    } else {
+      const n = Number(trimmed);
+      if (!isNaN(n)) set.add(n);
+    }
+  }
+  return set;
+}
+
+export function XCodeBlock({ code, language, title, frame, collapse, highlightLines, mark, markFlags }: CodeBlockProps) {
   const [html, setHtml] = useState<string>("");
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -47,10 +71,75 @@ export function XCodeBlock({ code, language, title, frame, collapse }: CodeBlock
 
   useEffect(() => {
     const highlight = async () => {
+      const highlightSet = parseHighlightLines(highlightLines);
+      const transformers: any[] = [];
+
+      // 行高亮 transformer
+      if (highlightSet.size > 0) {
+        transformers.push({
+          line(node: any, line: number) {
+            if (highlightSet.has(line)) {
+              this.addClassToHast(node, 'highlighted-line');
+            }
+          },
+        });
+      }
+
+      // 关键词高亮 transformer
+      if (mark) {
+        try {
+          const regex = new RegExp(mark, markFlags || 'g');
+          transformers.push({
+            span(node: any) {
+              // 获取 span 的文本内容
+              const text = node.children
+                ?.filter((c: any) => c.type === 'text')
+                .map((c: any) => c.value)
+                .join('');
+              if (!text) return;
+
+              // 使用正则拆分文本节点，将匹配部分包裹在 mark 标签中
+              const parts: any[] = [];
+              let lastIndex = 0;
+              let match;
+              // 每次调用需要重置 lastIndex
+              regex.lastIndex = 0;
+              while ((match = regex.exec(text)) !== null) {
+                if (match.index > lastIndex) {
+                  parts.push({ type: 'text', value: text.slice(lastIndex, match.index) });
+                }
+                parts.push({
+                  type: 'element',
+                  tagName: 'mark',
+                  properties: { class: 'code-mark' },
+                  children: [{ type: 'text', value: match[0] }],
+                });
+                lastIndex = match.index + match[0].length;
+                // 避免零长度匹配导致死循环
+                if (match[0].length === 0) {
+                  regex.lastIndex++;
+                  if (regex.lastIndex > text.length) break;
+                }
+              }
+              if (parts.length > 0) {
+                if (lastIndex < text.length) {
+                  parts.push({ type: 'text', value: text.slice(lastIndex) });
+                }
+                // 保留原有样式属性，替换 children
+                node.children = parts;
+              }
+            },
+          });
+        } catch {
+          // 正则无效时静默忽略
+        }
+      }
+
       try {
         const result = await codeToHtml(code, {
           lang: language as BundledLanguage,
           theme: theme === "dark" ? "github-dark" : "github-light",
+          transformers,
         });
         setHtml(result);
       } catch {
@@ -58,12 +147,13 @@ export function XCodeBlock({ code, language, title, frame, collapse }: CodeBlock
         const result = await codeToHtml(code, {
           lang: "plaintext",
           theme: theme === "dark" ? "github-dark" : "github-light",
+          transformers,
         });
         setHtml(result);
       }
     };
     highlight();
-  }, [code, language, theme]);
+  }, [code, language, theme, highlightLines, mark, markFlags]);
 
   const handleCopy = useCallback(() => {
     navigator.clipboard.writeText(code);

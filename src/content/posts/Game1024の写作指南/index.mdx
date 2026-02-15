@@ -180,6 +180,51 @@ import TabItem from '@/components/markdown/TabItem.astro'
   :::
 ::::
 
+## 高亮行
+可以在代码块的语法中使用`{ }`高亮指定行，支持单行高亮和多行高亮
+::::tabs
+  :::tab{label="效果预览"}
+  ```cpp title="main.cpp" {2,4-6}
+  int main () {
+    printf("Hello, World!\n");
+    return 0;
+  }
+  ```
+  :::
+  :::tab{label="代码"}
+  ````markdown
+  ```cpp title="main.cpp" {2,4-6}
+  int main () {
+    printf("Hello, World!\n");
+    return 0;
+  }
+  ```
+  ````
+  :::
+::::
+
+## 标记关键词
+可以在代码块的语法中使用`mark=/regex/flags`来标记关键词
+::::tabs
+  :::tab{label="效果预览"}
+  ```cpp title="main.cpp" mark=/printf/g
+  int main () {
+    printf("Hello, World!\n");
+    return 0;
+  }
+  ```
+  :::
+  :::tab{label="代码"}
+  ````markdown
+  ```cpp title="main.cpp" mark=/printf/g
+  int main () {
+    printf("Hello, World!\n");
+    return 0;
+  }
+  ```
+  ````
+  :::
+::::
 
 # 引用
 > 这是一个引用示例。

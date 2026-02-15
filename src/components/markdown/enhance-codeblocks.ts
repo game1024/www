@@ -71,11 +71,17 @@ function processCodeBlocks() {
       const title = pre.getAttribute('data-title') || code.getAttribute('data-title') || undefined;
       const frameAttr = pre.getAttribute('data-frame');
       const collapseAttr = pre.getAttribute('data-collapse');
+      const highlightLines = pre.getAttribute('data-highlight-lines') || undefined;
+      const mark = pre.getAttribute('data-mark') || undefined;
+      const markFlags = pre.getAttribute('data-mark-flags') || undefined;
       
       component = createElement(XCodeBlock, {
         code: codeText.trim(),
         language,
         title,
+        highlightLines,
+        mark,
+        markFlags,
         ...(frameAttr !== null && { frame: frameAttr === 'true' }),
         ...(collapseAttr !== null && { collapse: collapseAttr === 'true' })
       });
