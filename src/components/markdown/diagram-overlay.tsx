@@ -11,7 +11,7 @@ import {
 
 const ZOOM_STEP = 0.2;
 const ZOOM_MIN = 0.3;
-const ZOOM_MAX = 5;
+const ZOOM_MAX = 10;
 
 interface DiagramOverlayProps {
   open: boolean;

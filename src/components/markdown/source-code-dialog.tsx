@@ -83,6 +83,7 @@ export function SourceCodeDialog({
               size="icon-sm"
               onClick={onClose}
               title="关闭"
+              className="size-7"
             >
               <Icon icon="ri:close-line" className="size-4" />
             </Button>
