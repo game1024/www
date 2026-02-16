@@ -35,7 +35,7 @@ const tocHeadings = headings.filter(h => h.depth >= 1 && h.depth <= 3)
                 class="toc-link transition-colors block"
                 data-toc-link
                 data-slug="article-title"
-                onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' })"
+                onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'auto' })"
               >
                 <Marquee text="大纲" tag="div" duration={3} maskColor="var(--color-card)" />
               </a>

@@ -172,7 +172,7 @@ export function XCodeBlock({ code, language, title, frame, collapse, highlightLi
   const isCollapsed = needsCollapse && !expanded;
 
   return (
-    <div className="x-codeblock relative group my-2 rounded-lg border border-border overflow-hidden">
+    <div className="x-codeblock relative group mt-2 mb-8 rounded-lg border border-border overflow-hidden">
       {(displayTitle || showFrame) && (
         <div className="flex items-center px-4 py-1.5 bg-muted border-b border-border text-xs font-code text-muted-foreground relative">
           {showFrame && (

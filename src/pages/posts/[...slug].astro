@@ -60,20 +60,10 @@ const readingTime = Math.ceil((chineseChars / 300 + englishWords / 200));
             })}
           </time>
         </span>
-        {post.data.updatedAt && (
-          <span class="inline-flex items-center gap-1.5">
-            <Icon name="ri:history-line" class="size-4 shrink-0" />
-            <time datetime={post.data.updatedAt.toISOString()}>
-              {post.data.updatedAt.toLocaleDateString('zh-CN', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-              })}
-            </time>
-          </span>
-        )}
+        <span id="page-views" class="inline-flex items-center gap-1.5">
+          <Icon name="ri:eye-line" class="size-4 shrink-0" />
+          <span id="page-views-count">-</span> 次阅读
+        </span>
 
         <span class="inline-flex items-center gap-1.5">
           <Icon name="ri:pen-nib-line" class="size-4 shrink-0" />
@@ -116,4 +106,73 @@ const readingTime = Math.ceil((chineseChars / 300 + englishWords / 200));
 <script>
   import { enhanceCodeBlocks } from '@/components/markdown/enhance-codeblocks';
   enhanceCodeBlocks();
+</script>
+
+<script>
+  const UMAMI = {
+    base: 'http://umami.fiofio.cn:3000',
+    siteId: '7112cd31-a843-4d71-b87f-72f1b39353e6',
+    user: 'game1024',
+    pass: 'game1024',
+  };
+
+  async function getToken() {
+    const cached = sessionStorage.getItem('umami_token');
+    if (cached) return cached;
+
+    const res = await fetch(`${UMAMI.base}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: UMAMI.user, password: UMAMI.pass }),
+    });
+    if (!res.ok) return null;
+
+    const { token } = await res.json();
+    if (token) sessionStorage.setItem('umami_token', token);
+    return token;
+  }
+
+  async function getPageViews(token: string, path: string) {
+    const startAt = '1577836800000';
+    const endAt = Date.now().toString();
+
+    const res = await fetch(
+      `${UMAMI.base}/api/websites/${UMAMI.siteId}/stats?startAt=${startAt}&endAt=${endAt}&path=${path}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    if (res.status === 401) {
+      sessionStorage.removeItem('umami_token');
+      return null;
+    }
+    if (!res.ok) return 0;
+
+    const data = await res.json();
+    return data.pageviews?.value ?? data.pageviews ?? 0;
+  }
+
+  async function initPageViews() {
+    const el = document.getElementById('page-views-count');
+    if (!el) return;
+
+    try {
+      let token = await getToken();
+      if (!token) return;
+
+      let views = await getPageViews(token, window.location.pathname);
+
+      // token 过期，重新登录重试一次
+      if (views === null) {
+        token = await getToken();
+        if (!token) return;
+        views = await getPageViews(token, window.location.pathname);
+      }
+
+      el.textContent = (views ?? 0).toLocaleString();
+    } catch {
+      // 静默失败
+    }
+  }
+
+  initPageViews();
 </script>

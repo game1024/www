@@ -65,7 +65,9 @@ import 快捷方式报错 from "./快捷方式报错.webp";
 
 ## 窗口透明
 :::warning
-macos，需要设置`macOSPrivateApi=true`，才能使用transparent api，不过需要注意开启了这个选项后，无法在App Store上架应用
+macos，需要设置`macOSPrivateApi=true`，才能使用transparent api
+
+不过开启了这个选项后，无法在App Store上架应用
 :::
 
 在tauri中实现窗口透明非常简单，只需要设置`transparent: true`即可
@@ -79,7 +81,6 @@ let window = tauri::WebviewWindowBuilder::new(
     .inner_size(800.0, 600.0)
     .transparent(true)
 ```
-
 
 也可以在tauri.conf.json中设置
 
@@ -135,7 +136,7 @@ let window = tauri::WebviewWindowBuilder::new(
 ```
 
 ## JS创建窗口
-在tauri中，如果你想要用javascript创建窗口, 你必须将command声明为`async command`，否则会让整个应用阻塞住
+在tauri中，必须将command声明为`async`来创建窗口，否则会让整个应用阻塞住
 
 ```rust title="lib.rs" mark=/(async)/
 

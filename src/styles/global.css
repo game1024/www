@@ -8,7 +8,7 @@
 @theme inline {
   --font-sans: "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;
-  --font-code: "Geist Mono", "Alibaba PuHuiTi", ui-monospace, monospace;
+  --font-code: "Geist Mono", "Noto Sans SC", ui-monospace, monospace;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -164,8 +164,7 @@
 /* ── 代码块行高亮 ─────────────────────────── */
 .shiki-wrapper .highlighted-line {
   display: inline-block;
-  min-width: 100%;
-  max-width: 100%;
+  width: 100%;
   background-color: var(--code-line-bg);
   border-left: 3px solid var(--code-line-border);
   margin-left: -1rem;
@@ -176,7 +175,7 @@
 /* ── 代码块 ins/del 行样式 ─────────────────── */
 .shiki-wrapper .ins-line {
   display: inline-block;
-  min-width: 100%;
+  width: 100%;
   background-color: var(--code-ins-bg);
   border-left: 3px solid var(--code-ins-border);
   margin-left: -1rem;
@@ -186,7 +185,7 @@
 
 .shiki-wrapper .del-line {
   display: inline-block;
-  min-width: 100%;
+  width: 100%;
   background-color: var(--code-del-bg);
   border-left: 3px solid var(--code-del-border);
   margin-left: -1rem;
