@@ -8,7 +8,6 @@ import {
   DialogContent,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface SourceCodeDialogProps {
   open: boolean;
@@ -91,14 +90,12 @@ export function SourceCodeDialog({
         </div>
 
         {/* 代码区 */}
-        <ScrollArea type="auto" className="w-full">
           <pre 
-            className="max-h-[70vh] p-4 text-sm leading-relaxed whitespace-pre-wrap break-words text-neutral-900 dark:text-neutral-100"
+            className="max-h-[70vh] overscroll-auto overflow-auto p-4 text-sm leading-relaxed whitespace-pre-wrap break-words text-neutral-900 dark:text-neutral-100"
             style={{ backgroundColor: isDark ? "#24292e" : "#fafafa" }}
           >
-            <code className="font-code">{source}</code>
+            <code className="font-code ">{source}</code>
           </pre>
-        </ScrollArea>
       </DialogContent>
     </Dialog>
   );

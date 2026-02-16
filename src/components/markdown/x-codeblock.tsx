@@ -214,7 +214,7 @@ export function XCodeBlock({ code, language, title, frame, collapse, highlightLi
         <div className={isCollapsed ? "max-h-[calc(1.65rem*5+2rem)] overflow-hidden" : ""}>
           {html ? (
             <div
-              className="shiki-wrapper [&>pre]:p-4 [&>pre]:m-0 [&>pre]:overflow-x-auto [&>pre]:text-sm [&>pre]:leading-relaxed [&_code]:font-code [&_code]:block [&_code]:w-max [&_code]:min-w-full [&_span]:!no-underline [&_span]:![text-decoration:none]"
+              className="shiki-wrapper [&>pre]:p-4 [&>pre]:m-0 [&>pre]:overscroll-auto [&>pre]:overflow-x-auto [&>pre]:text-sm [&>pre]:leading-relaxed [&_code]:font-code [&_code]:block [&_code]:w-max [&_code]:min-w-full [&_span]:!no-underline [&_span]:![text-decoration:none]"
               dangerouslySetInnerHTML={{ __html: html }}
             />
           ) : (

@@ -26,7 +26,7 @@ export function XMermaid({ source }: MermaidBlockProps) {
       try {
         const { default: mermaid } = await import(
           /* @vite-ignore */
-          "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs"
+          "https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.esm.min.mjs"
         );
 
         if (cancelled) return;
@@ -41,7 +41,7 @@ export function XMermaid({ source }: MermaidBlockProps) {
               primaryBorderColor: "#30363d",
               secondBgColor: "#2d333b",
               textColor: "#c9d1d9",
-              fontFamily: "var(--font-code)",
+              //fontFamily: "var(--font-code)",
               primaryTextColor: "#c9d1d9",
               tertiaryTextColor: "#8b949e",
               lineColor: "#30363d",
@@ -113,7 +113,7 @@ export function XMermaid({ source }: MermaidBlockProps) {
         </div>
         <div
           ref={containerRef}
-          className="flex justify-center items-center p-4 overflow-auto"
+          className="flex justify-center items-center p-4 overflow-auto [&_foreignObject]:overflow-visible [&_foreignObject]:w-auto"
         />
       </div>
 
