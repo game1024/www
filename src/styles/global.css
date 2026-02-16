@@ -214,6 +214,18 @@
     letter-spacing: 0.05em;
   }
 
+  /* Mermaid 图表不继承段落字间距 */
+  .prose .x-mermaid,
+  .prose .x-mermaid * {
+    letter-spacing: normal;
+  }
+
+  /* Infographic 图表不继承段落字间距 */
+  .prose .x-infographic,
+  .prose .x-infographic * {
+    letter-spacing: normal;
+  }
+
   .prose h1 {
     @apply text-4xl font-bold mb-6 mt-8;
   }
