@@ -203,6 +203,28 @@ import TabItem from '@/components/markdown/TabItem.astro'
   :::
 ::::
 
+也可以使用`ins=`和`del=`来高亮指定行，分别使用不同的颜色来表示新增和删除的代码行
+::::tabs
+  :::tab{label="效果预览"}
+  ```cpp title="main.cpp" ins={2,3} del={4}
+  int main () {
+    printf("Hello, World!\n");
+    return 0;
+  }
+  ```
+  :::
+  :::tab{label="代码"}
+  ````markdown
+  ```cpp title="main.cpp" ins={2,3} del={4}
+  int main () {
+    printf("Hello, World!\n");
+    return 0;
+  }
+  ```
+  ````
+  :::
+::::
+
 ## 标记关键词
 可以在代码块的语法中使用`mark=/regex/flags`来标记关键词
 ::::tabs
@@ -554,3 +576,17 @@ data
   </TabItem>
 </Tabs>
 
+## Github卡片
+:::::tabs
+  ::::tab{label="效果预览"}
+  :::github{repo="game1024/OpenSpeedy"}
+  :::
+  ::::
+
+  ::::tab{label="代码"}
+  ````markdown
+  :::github{repo="game1024/OpenSpeedy"}
+  :::
+  ````
+  ::::
+:::::

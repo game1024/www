@@ -83,6 +83,22 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
   --highlight: oklch(0.488 0.243 264.376);
+  --code-line-bg: rgba(0, 120, 215, 0.1);
+  --code-line-border: oklch(0.6 0.18 264);
+  --code-mark-bg: oklch(0.6 0.18 264 / 0.12);
+  --code-mark-border: oklch(0.6 0.18 264 / 0.5);
+  --code-mark-shadow: oklch(0.6 0.18 264 / 0.08);
+  --code-ins-bg: oklch(0.55 0.15 145 / 0.12);
+  --code-ins-border: oklch(0.55 0.15 145);
+  --code-del-bg: oklch(0.55 0.2 25 / 0.12);
+  --code-del-border: oklch(0.55 0.2 25);
+  --container-note: oklch(0.7 0.14 250);
+  --container-tip: oklch(0.7 0.14 180);
+  --container-important: oklch(0.7 0.14 310);
+  --container-warning: oklch(0.7 0.14 60);
+  --container-caution: oklch(0.6 0.2 25);
+  --container-code-bg: rgba(0, 0, 0, 0.05);
+  --github-card-hover-shadow: rgba(0, 0, 0, 0.06);
 }
 
 .dark {
@@ -118,6 +134,22 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
   --highlight: oklch(0.7 0.18 264.376);
+  --code-line-bg: rgba(56, 139, 253, 0.12);
+  --code-line-border: oklch(0.7 0.18 264);
+  --code-mark-bg: oklch(0.7 0.18 264 / 0.15);
+  --code-mark-border: oklch(0.7 0.18 264 / 0.6);
+  --code-mark-shadow: oklch(0.7 0.18 264 / 0.1);
+  --code-ins-bg: oklch(0.6 0.15 145 / 0.18);
+  --code-ins-border: oklch(0.65 0.15 145);
+  --code-del-bg: oklch(0.6 0.2 25 / 0.18);
+  --code-del-border: oklch(0.65 0.2 25);
+  --container-note: oklch(0.75 0.14 250);
+  --container-tip: oklch(0.75 0.14 180);
+  --container-important: oklch(0.75 0.14 310);
+  --container-warning: oklch(0.75 0.14 60);
+  --container-caution: oklch(0.65 0.2 25);
+  --container-code-bg: rgba(255, 255, 255, 0.1);
+  --github-card-hover-shadow: rgba(0, 0, 0, 0.3);
 }
 
 @layer base {
@@ -132,34 +164,46 @@
 /* ── 代码块行高亮 ─────────────────────────── */
 .shiki-wrapper .highlighted-line {
   display: inline-block;
-  width: 100%;
-  background-color: rgba(0, 120, 215, 0.1);
-  border-left: 3px solid oklch(0.6 0.18 264);
+  min-width: 100%;
+  max-width: 100%;
+  background-color: var(--code-line-bg);
+  border-left: 3px solid var(--code-line-border);
   margin-left: -1rem;
   padding-left: calc(1rem - 3px);
+  padding-right: 1rem;
 }
 
-.dark .shiki-wrapper .highlighted-line {
-  background-color: rgba(56, 139, 253, 0.12);
-  border-left-color: oklch(0.7 0.18 264);
+/* ── 代码块 ins/del 行样式 ─────────────────── */
+.shiki-wrapper .ins-line {
+  display: inline-block;
+  min-width: 100%;
+  background-color: var(--code-ins-bg);
+  border-left: 3px solid var(--code-ins-border);
+  margin-left: -1rem;
+  padding-left: calc(1rem - 3px);
+  padding-right: 1rem;
+}
+
+.shiki-wrapper .del-line {
+  display: inline-block;
+  min-width: 100%;
+  background-color: var(--code-del-bg);
+  border-left: 3px solid var(--code-del-border);
+  margin-left: -1rem;
+  padding-left: calc(1rem - 3px);
+  padding-right: 1rem;
 }
 
 /* ── 代码块关键词高亮 mark ──────────────────── */
 .shiki-wrapper mark.code-mark {
   display: inline-block;
-  background-color: oklch(0.6 0.18 264 / 0.12);
+  background-color: var(--code-mark-bg);
   color: inherit;
-  border: 2px solid oklch(0.6 0.18 264 / 0.5);
+  border: 2px solid var(--code-mark-border);
   border-radius: 3px;
   padding: 0 3px;
   margin: 0 2px;
-  box-shadow: 0 0 0 2px oklch(0.6 0.18 264 / 0.08);
-}
-
-.dark .shiki-wrapper mark.code-mark {
-  background-color: oklch(0.7 0.18 264 / 0.15);
-  border-color: oklch(0.7 0.18 264 / 0.6);
-  box-shadow: 0 0 0 2px oklch(0.7 0.18 264 / 0.1);
+  box-shadow: 0 0 0 2px var(--code-mark-shadow);
 }
 
 /* Markdown 标题样式自定义 */
@@ -168,6 +212,7 @@
   /* 段落间距（类似 GitHub Markdown） */
   .prose p {
     @apply mb-4 leading-relaxed;
+    letter-spacing: 0.05em;
   }
 
   .prose h1 {
@@ -200,6 +245,7 @@
   
   .prose li {
     @apply leading-relaxed;
+    letter-spacing: 0.05em;
   }
 
   /* 引用样式 */

@@ -30,87 +30,47 @@
 
 /* Note - 蓝色 */
 .custom-container.note {
-  border-color: oklch(0.7 0.14 250);
-}
-
-.dark .custom-container.note {
-  border-color: oklch(0.75 0.14 250);
+  border-color: var(--container-note);
 }
 
 .custom-container.note .container-title {
-  color: oklch(0.7 0.14 250);
-}
-
-.dark .custom-container.note .container-title {
-  color: oklch(0.75 0.14 250);
+  color: var(--container-note);
 }
 
 /* Tip - 青绿色 */
 .custom-container.tip {
-  border-color: oklch(0.7 0.14 180);
-}
-
-.dark .custom-container.tip {
-  border-color: oklch(0.75 0.14 180);
+  border-color: var(--container-tip);
 }
 
 .custom-container.tip .container-title {
-  color: oklch(0.7 0.14 180);
-}
-
-.dark .custom-container.tip .container-title {
-  color: oklch(0.75 0.14 180);
+  color: var(--container-tip);
 }
 
 /* Important - 紫色 */
 .custom-container.important {
-  border-color: oklch(0.7 0.14 310);
-}
-
-.dark .custom-container.important {
-  border-color: oklch(0.75 0.14 310);
+  border-color: var(--container-important);
 }
 
 .custom-container.important .container-title {
-  color: oklch(0.7 0.14 310);
-}
-
-.dark .custom-container.important .container-title {
-  color: oklch(0.75 0.14 310);
+  color: var(--container-important);
 }
 
 /* Warning - 黄色 */
 .custom-container.warning {
-  border-color: oklch(0.7 0.14 60);
-}
-
-.dark .custom-container.warning {
-  border-color: oklch(0.75 0.14 60);
+  border-color: var(--container-warning);
 }
 
 .custom-container.warning .container-title {
-  color: oklch(0.7 0.14 60);
-}
-
-.dark .custom-container.warning .container-title {
-  color: oklch(0.75 0.14 60);
+  color: var(--container-warning);
 }
 
 /* Caution - 红色 */
 .custom-container.caution {
-  border-color: oklch(0.6 0.2 25);
-}
-
-.dark .custom-container.caution {
-  border-color: oklch(0.65 0.2 25);
+  border-color: var(--container-caution);
 }
 
 .custom-container.caution .container-title {
-  color: oklch(0.6 0.2 25);
-}
-
-.dark .custom-container.caution .container-title {
-  color: oklch(0.65 0.2 25);
+  color: var(--container-caution);
 }
 
 /* 容器内的段落样式 */
@@ -132,14 +92,10 @@
 }
 
 .custom-container :not(pre) > code {
-  background: rgba(0, 0, 0, 0.05);
+  background: var(--container-code-bg);
   padding: 0.2em 0.4em;
   border-radius: 0.25rem;
   font-size: 0.9em;
-}
-
-.dark .custom-container :not(pre) > code {
-  background: rgba(255, 255, 255, 0.1);
 }
 
 /* ── GitHub Repo Card ─────────────────────── */
@@ -159,11 +115,7 @@
 
 .github-card:hover {
   border-color: var(--muted-foreground);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-}
-
-.dark .github-card:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 8px var(--github-card-hover-shadow);
 }
 
 .github-card-header {

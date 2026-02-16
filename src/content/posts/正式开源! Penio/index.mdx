@@ -3,28 +3,23 @@ title: "正式开源! Penio"
 description: "本文分享了Penio开源的历程，以及使用 Tauri 开发过程中的实践经验和踩坑总结。"
 createdAt: 2026-02-15 16:43
 updatedAt: 2026-02-15 16:43
-category: "开发日记"
-tags: ["penio", "开源", "tauri"]
+category: "开源"
+tags: ["penio", "跨平台", "tauri"]
 ---
 import {Image} from "astro:assets";
 import PenioIcon from "./penio.webp";
 import 鼠标点击特效 from "./鼠标点击特效.mp4";
 import 键盘回显 from "./键盘回显.mp4";
 import 屏幕标注 from "./屏幕标注.mp4";
+import macos权限 from "./macos权限.webp";
+import 快捷方式报错 from "./快捷方式报错.webp";
 
 :::github{repo="game1024/Penio"}
 :::
 
 # 前言
 
-在写Penio之前，我有使用过类似的工具，如ppink，presentify但是发现总是有一些地方，我不太满意
-
-正好那会对tauri开发比较干兴趣，所以自己就决定开发了
-
-本来是准备商业化的，但是经过几个月的运营，发现很少有人愿意付费，所以就干脆开源出来
-
-欢迎社区的用户一起使用和二次开发~
-
+在写Penio之前，我有使用过类似的工具，如ppink，presentify但是发现总是有一些地方，我不太满意，正好那会对tauri开发比较干兴趣，所以自己就决定开发了，最开始是准备商业化的，但是发现很少有人愿意付费，所以就干脆开源出来，让更多的用户能够使用
 
 
 # 功能介绍
@@ -46,7 +41,7 @@ import 屏幕标注 from "./屏幕标注.mp4";
 
 ## 屏幕标注
 
-在屏幕中想要勾画出标注一些重要的地方时，我又添加了屏幕标注功能
+在屏幕中想要标注一些重要的地方时，又添加了屏幕标注功能
 <video controls autoPlay loop className="max-w-sm block mb-4">
   <source src={屏幕标注} type="video/mp4" />
 </video>
@@ -56,24 +51,24 @@ import 屏幕标注 from "./屏幕标注.mp4";
 :::
 
 ## 跨平台
-得益于tauri，Penio可以同时在windows、macos、linux(x11)上使用，并且功能完全一样
-
+得益于tauri框架，Penio可以同时在windows、macos、linux(x11)上使用
 # 开发记录
 
 ## App图标
-一个笔的形状，代表了Penio的屏幕画笔核心功能
-<Image src={PenioIcon} alt="Penio图标" className="w-16 h-16 mb-4" />
-
 :::note
 图标我是直接使用Inkscape，基于iconfont上的图标修改得到
 :::
+一个笔的形状，代表了Penio的屏幕画笔核心功能
+<Image src={PenioIcon} alt="Penio图标" className="w-16 h-16 mb-4" />
+
+
 
 ## 窗口透明
-:::note
-macos，需要设置`macOSPrivateApi=true`，才能使用transparent api
+:::warning
+macos，需要设置`macOSPrivateApi=true`，才能使用transparent api，不过需要注意开启了这个选项后，无法在App Store上架应用
 :::
 
-在tauri中实现窗口透明非常简单，只需要在创建窗口的时候设置`transparent: true`即可
+在tauri中实现窗口透明非常简单，只需要设置`transparent: true`即可
 ```rust title="lib.rs"
 let window = tauri::WebviewWindowBuilder::new(
         app,
@@ -140,11 +135,9 @@ let window = tauri::WebviewWindowBuilder::new(
 ```
 
 ## JS创建窗口
-在tauri中，如果你想要用javascript创建窗口, 你必须将command声明为`async command`
+在tauri中，如果你想要用javascript创建窗口, 你必须将command声明为`async command`，否则会让整个应用阻塞住
 
-否则会让整个应用阻塞住
-
-```rust title="lib.rs" mark=/async/
+```rust title="lib.rs" mark=/(async)/
 
 // 必须带上async关键字, 否则当前端调用命令时会直接阻塞整个应用
 #[tauri::command]
@@ -154,8 +147,8 @@ async fn refresh_monitors(app: AppHandle, emit_event: bool) -> Result<(), String
 
 // 不能这样写！！！
 #[tauri::command]
- fn refresh_monitors(app: AppHandle, emit_event: bool) -> Result<(), String> {
-   ...
+fn refresh_monitors(app: AppHandle, emit_event: bool) -> Result<(), String> {
+   // ...
 }
 ```
 
@@ -168,10 +161,61 @@ async fn refresh_monitors(app: AppHandle, emit_event: bool) -> Result<(), String
 
 - `linux`是物理像素单位
 
-# 整体总结
-总的来说，tauri是一个非常不错的跨平台桌面应用开发框架，虽然开发过程中有一些小的毛病，但是基本都能找到对应的解决方案
+## macos系统权限
+macos系统对应用的权限控制非常严格，一开始我在调试的时候，发现怎么都无法捕获鼠标和键盘的事件，后面才明白需要在系统设置中给应用添加辅助功能和输入监控权限，才可以正常使用全局的鼠标和键盘事件监听功能
 
-如果你是准备找一个能够快速开发，更现代的跨平台框架，我强烈推荐你试试tauri。
+<Image src={macos权限} alt="macos权限设置" className="w-full mb-4" />
+
+# 发布记录
+
+## windows
+
+### MSIX自启动
+打包windows应用时，我选择了msix格式，这样可以省去购买ov签名的费用，同时不需要自己托管安装包的下载
+
+不过msix打包tauri应用的时候，我发现tauri-autostart插件无法正常生效，需要手动在程序清单文件中加入微软官方的自启动插件
+
+```xml title="Package.appxmanifest" {3,6-10}
+<Package 
+  ...
+  xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10">
+
+  <Application>
+    <Extensions>
+        <desktop:Extension Category="windows.startupTask" Executable="Penio.exe" EntryPoint="Windows.FullTrustApplication">
+          <desktop:StartupTask TaskId="PenioStartupId" Enabled="true" DisplayName="Penio" />
+        </desktop:Extension>
+    </Extensions>
+  </Application>
+</Package>
+```
+
+### MSIX快捷方式
+使用 MSIX Package tool 打包时，我还发现程序清单文件中会默认添加一个桌面的快捷键方式，但是使用这个桌面快捷方式启动会报错
+
+<Image src={快捷方式报错} alt="快捷方式报错" className="w-full mb-4" />
+
+我需要去掉默认的快捷方式扩展。之后在安装完后，将开始菜单的快捷方式拖到桌面上，就能正常快速启动应用了
+```xml title="Package.appxmanifest" del={7-12}
+<Package 
+  ...
+>
+
+  <Application>
+    <Extensions>
+        <desktop7:Extension Category="windows.shortcut">
+          <desktop7:Shortcut File="[{Desktop}]\Penio.lnk" Icon="[{Package}]\penio.exe" Description="Runs Penio" />
+        </desktop7:Extension>
+        <desktop7:Extension Category="windows.shortcut">
+          <desktop7:Shortcut File="[{Common Programs}]\Penio\Penio.lnk" Icon="[{Package}]\penio.exe" Description="Runs Penio" />
+        </desktop7:Extension>
+    </Extensions>
+  </Application>
+</Package>
+```
+
+# 整体总结
+总的来说，tauri是一个非常不错的跨平台桌面应用开发框架，虽然开发过程中有一些小的毛病，但是基本都能找到对应的解决方案，如果你是准备找一个能够快速开发，更现代的跨平台框架，我强烈推荐你试试tauri。
 
 除了跨平台外，tauri其他方面也非常优秀
 1. Rust生态的cargo包管理简直不要太方便

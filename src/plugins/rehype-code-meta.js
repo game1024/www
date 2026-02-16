@@ -48,7 +48,19 @@ export default function rehypeCodeMeta() {
         node.properties = node.properties || {};
         node.properties['data-highlight-lines'] = highlightMatch[1].replace(/\s/g, '');
       }
+      // 提取 ins 行 ins={1,3-5}
+      const insMatch = meta.match(/ins\s*=\s*\{([\d,\s-]+)\}/);
+      if (insMatch) {
+        node.properties = node.properties || {};
+        node.properties['data-ins-lines'] = insMatch[1].replace(/\s/g, '');
+      }
 
+      // 提取 del 行 del={1,3-5}
+      const delMatch = meta.match(/del\s*=\s*\{([\d,\s-]+)\}/);
+      if (delMatch) {
+        node.properties = node.properties || {};
+        node.properties['data-del-lines'] = delMatch[1].replace(/\s/g, '');
+      }
       // 提取关键词高亮 mark=/regex/ 或 mark=/regex/flags
       const markMatch = meta.match(/mark\s*=\s*\/((?:[^/\\]|\\.)*)\/([gimsuy]*)/);
       if (markMatch) {

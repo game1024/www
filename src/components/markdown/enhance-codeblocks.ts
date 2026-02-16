@@ -72,6 +72,8 @@ function processCodeBlocks() {
       const frameAttr = pre.getAttribute('data-frame');
       const collapseAttr = pre.getAttribute('data-collapse');
       const highlightLines = pre.getAttribute('data-highlight-lines') || undefined;
+      const insLines = pre.getAttribute('data-ins-lines') || undefined;
+      const delLines = pre.getAttribute('data-del-lines') || undefined;
       const mark = pre.getAttribute('data-mark') || undefined;
       const markFlags = pre.getAttribute('data-mark-flags') || undefined;
       
@@ -80,6 +82,8 @@ function processCodeBlocks() {
         language,
         title,
         highlightLines,
+        insLines,
+        delLines,
         mark,
         markFlags,
         ...(frameAttr !== null && { frame: frameAttr === 'true' }),

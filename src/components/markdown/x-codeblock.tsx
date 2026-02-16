@@ -13,6 +13,8 @@ export interface CodeBlockProps {
   frame?: boolean;
   collapse?: boolean;
   highlightLines?: string;
+  insLines?: string;
+  delLines?: string;
   mark?: string;
   markFlags?: string;
 }
@@ -38,7 +40,7 @@ function parseHighlightLines(raw?: string): Set<number> {
   return set;
 }
 
-export function XCodeBlock({ code, language, title, frame, collapse, highlightLines, mark, markFlags }: CodeBlockProps) {
+export function XCodeBlock({ code, language, title, frame, collapse, highlightLines, insLines, delLines, mark, markFlags }: CodeBlockProps) {
   const [html, setHtml] = useState<string>("");
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -72,13 +74,19 @@ export function XCodeBlock({ code, language, title, frame, collapse, highlightLi
   useEffect(() => {
     const highlight = async () => {
       const highlightSet = parseHighlightLines(highlightLines);
+      const insSet = parseHighlightLines(insLines);
+      const delSet = parseHighlightLines(delLines);
       const transformers: any[] = [];
 
-      // 行高亮 transformer
-      if (highlightSet.size > 0) {
+      // 行高亮 / ins / del transformer
+      if (highlightSet.size > 0 || insSet.size > 0 || delSet.size > 0) {
         transformers.push({
           line(node: any, line: number) {
-            if (highlightSet.has(line)) {
+            if (insSet.has(line)) {
+              this.addClassToHast(node, 'ins-line');
+            } else if (delSet.has(line)) {
+              this.addClassToHast(node, 'del-line');
+            } else if (highlightSet.has(line)) {
               this.addClassToHast(node, 'highlighted-line');
             }
           },
@@ -153,7 +161,7 @@ export function XCodeBlock({ code, language, title, frame, collapse, highlightLi
       }
     };
     highlight();
-  }, [code, language, theme, highlightLines, mark, markFlags]);
+  }, [code, language, theme, highlightLines, insLines, delLines, mark, markFlags]);
 
   const handleCopy = useCallback(() => {
     navigator.clipboard.writeText(code);
@@ -206,7 +214,7 @@ export function XCodeBlock({ code, language, title, frame, collapse, highlightLi
         <div className={isCollapsed ? "max-h-[calc(1.65rem*5+2rem)] overflow-hidden" : ""}>
           {html ? (
             <div
-              className="shiki-wrapper [&>pre]:p-4 [&>pre]:m-0 [&>pre]:overflow-x-auto [&>pre]:text-sm [&>pre]:leading-relaxed [&_code]:font-code [&_span]:!no-underline [&_span]:![text-decoration:none]"
+              className="shiki-wrapper [&>pre]:p-4 [&>pre]:m-0 [&>pre]:overflow-x-auto [&>pre]:text-sm [&>pre]:leading-relaxed [&_code]:font-code [&_code]:block [&_code]:w-max [&_code]:min-w-full [&_span]:!no-underline [&_span]:![text-decoration:none]"
               dangerouslySetInnerHTML={{ __html: html }}
             />
           ) : (
