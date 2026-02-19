@@ -1,22 +1,20 @@
-// x-file-tree Web Component：处理目录图标切换
+/**
+ * <x-file-tree> Web Component
+ * 处理目录展开/折叠时的图标切换
+ */
+
 class XFileTree extends HTMLElement {
   connectedCallback() {
-    this.querySelectorAll('details').forEach((details) => {
+    for (const details of this.querySelectorAll('details')) {
       const icon = details.querySelector('.ft-dir-icon');
-      if (!icon) return;
+      if (!icon) continue;
 
-      const update = () => {
-        const src = details.open
-          ? icon.dataset.srcOpen
-          : icon.dataset.srcClosed;
+      details.addEventListener('toggle', () => {
+        const src = details.open ? icon.dataset.srcOpen : icon.dataset.srcClosed;
         if (src) icon.src = src;
-      };
-
-      details.addEventListener('toggle', update);
-    });
+      });
+    }
   }
 }
 
-if (!customElements.get('x-file-tree')) {
-  customElements.define('x-file-tree', XFileTree);
-}
+if (!customElements.get('x-file-tree')) customElements.define('x-file-tree', XFileTree);

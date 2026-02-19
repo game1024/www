@@ -24,16 +24,25 @@ export function XMermaid({ source }: MermaidBlockProps) {
       if (!containerRef.current) return;
 
       try {
-        const { default: mermaid } = await import(
-          /* @vite-ignore */
-          "https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.esm.min.mjs"
-        );
+        const [{ default: mermaid }, zenuml] = await Promise.all([
+          import(
+            /* @vite-ignore */
+            "https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.esm.min.mjs"
+          ),
+          import(
+            /* @vite-ignore */
+            "https://cdn.jsdelivr.net/npm/@mermaid-js/mermaid-zenuml@0.2.0/dist/mermaid-zenuml.esm.min.mjs"
+          ),
+        ]);
 
         if (cancelled) return;
+
+        await mermaid.registerExternalDiagrams([zenuml.default]);
 
         const isDark = document.documentElement.classList.contains("dark");
         mermaid.initialize({
           startOnLoad: false,
+          fontFamily: "var(--font-code)",
           theme: isDark ? "base" : "default",
           ...(isDark && {
             themeVariables: {
@@ -41,7 +50,6 @@ export function XMermaid({ source }: MermaidBlockProps) {
               primaryBorderColor: "#30363d",
               secondBgColor: "#2d333b",
               textColor: "#c9d1d9",
-              fontFamily: "var(--font-code)",
               primaryTextColor: "#c9d1d9",
               tertiaryTextColor: "#8b949e",
               lineColor: "#30363d",

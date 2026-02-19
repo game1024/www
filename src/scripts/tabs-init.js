@@ -1,115 +1,93 @@
 /**
- * x-tabs 自定义元素初始化脚本
- * 为 remark-custom-directives 生成的 <x-tabs> 提供交互支持
- * 自动从 div[role="tabpanel"][data-label] 子节点生成 tab 按钮
- * 与 Tabs.astro 组件共享同一个自定义元素
+ * <x-tabs> Web Component
+ * 为 remark 指令和 Tabs.astro 提供统一的 Tab 交互
  */
 
-if (!customElements.get('x-tabs')) {
-  let groupCounter = 0;
+const KEY_MAP = { ArrowRight: 1, ArrowLeft: -1, Home: 0, End: -0 };
 
-  class XTabs extends HTMLElement {
-    connectedCallback() {
-      const panels = this.querySelectorAll(':scope > [role="tabpanel"]');
-      if (panels.length === 0) return;
+let uid = 0;
 
-      // 如果已经有 tablist-wrapper，说明是 Tabs.astro 生成的，直接绑定事件
-      const existingTablist = this.querySelector('.tab-list');
-      if (existingTablist) {
-        this._bindEvents();
-        return;
-      }
+class XTabs extends HTMLElement {
+  #tabs = [];
+  #panels = [];
 
-      // 否则是 remark 指令生成的，需要动态创建 tab 按钮
-      const gid = groupCounter++;
+  connectedCallback() {
+    this.#panels = [...this.querySelectorAll(':scope > [role="tabpanel"]')];
+    if (!this.#panels.length) return;
 
-      // 创建 tablist
-      const tablistWrapper = document.createElement('div');
-      tablistWrapper.className = 'tablist-wrapper';
-      const tablist = document.createElement('div');
-      tablist.className = 'tab-list';
-      tablist.setAttribute('role', 'tablist');
+    // Tabs.astro 已有 tab-list → 直接绑定事件；remark 指令 → 动态生成
+    if (!this.querySelector('.tab-list')) this.#buildTabList();
 
-      panels.forEach((panel, idx) => {
-        const label = panel.getAttribute('data-label') || `Tab ${idx + 1}`;
-        const tabId = `dtab-g${gid}-${idx}`;
-        const panelId = `dtab-panel-g${gid}-${idx}`;
-
-        // 设置 panel id & aria
-        panel.id = panelId;
-        panel.setAttribute('aria-labelledby', tabId);
-        if (idx !== 0) panel.hidden = true;
-
-        // 创建 tab 按钮
-        const btn = document.createElement('button');
-        btn.setAttribute('role', 'tab');
-        btn.id = tabId;
-        btn.setAttribute('aria-selected', idx === 0 ? 'true' : 'false');
-        btn.setAttribute('aria-controls', panelId);
-        if (idx !== 0) btn.setAttribute('tabindex', '-1');
-        btn.textContent = label;
-        tablist.appendChild(btn);
-      });
-
-      tablistWrapper.appendChild(tablist);
-      this.insertBefore(tablistWrapper, this.firstChild);
-
-      this._bindEvents();
-    }
-
-    _bindEvents() {
-      const tabs = this.querySelectorAll('[role="tab"]');
-      const panels = this.querySelectorAll('[role="tabpanel"]');
-
-      tabs.forEach((tab) => {
-        tab.addEventListener('click', () => {
-          this._switchTab(tab, tabs, panels);
-        });
-
-        tab.addEventListener('keydown', (e) => {
-          const tabArray = Array.from(tabs);
-          const currentIdx = tabArray.indexOf(tab);
-          let newIdx = null;
-
-          if (e.key === 'ArrowRight') {
-            newIdx = (currentIdx + 1) % tabArray.length;
-          } else if (e.key === 'ArrowLeft') {
-            newIdx = (currentIdx - 1 + tabArray.length) % tabArray.length;
-          } else if (e.key === 'Home') {
-            newIdx = 0;
-          } else if (e.key === 'End') {
-            newIdx = tabArray.length - 1;
-          }
-
-          if (newIdx !== null) {
-            e.preventDefault();
-            this._switchTab(tabArray[newIdx], tabs, panels);
-            tabArray[newIdx].focus();
-          }
-        });
-      });
-    }
-
-    _switchTab(newTab, tabs, panels) {
-      tabs.forEach((tab) => {
-        tab.setAttribute('aria-selected', 'false');
-        tab.setAttribute('tabindex', '-1');
-      });
-
-      panels.forEach((panel) => {
-        panel.hidden = true;
-      });
-
-      newTab.setAttribute('aria-selected', 'true');
-      newTab.removeAttribute('tabindex');
-
-      const panelId = newTab.getAttribute('aria-controls');
-      if (panelId) {
-        const panel = this.querySelector(`#${panelId}`);
-        if (panel) panel.hidden = false;
-      }
-    }
+    this.#tabs = [...this.querySelectorAll('[role="tab"]')];
+    this.#bindEvents();
   }
 
-  customElements.define('x-tabs', XTabs);
+  #buildTabList() {
+    const gid = uid++;
+    const tablist = document.createElement('div');
+    tablist.className = 'tab-list';
+    tablist.setAttribute('role', 'tablist');
+
+    this.#panels.forEach((panel, i) => {
+      const tabId = `tab-${gid}-${i}`;
+      const panelId = `panel-${gid}-${i}`;
+
+      Object.assign(panel, { id: panelId, hidden: i !== 0 });
+      panel.setAttribute('aria-labelledby', tabId);
+
+      const btn = Object.assign(document.createElement('button'), {
+        id: tabId,
+        textContent: panel.dataset.label || `Tab ${i + 1}`,
+      });
+      btn.setAttribute('role', 'tab');
+      btn.setAttribute('aria-selected', String(i === 0));
+      btn.setAttribute('aria-controls', panelId);
+      if (i) btn.tabIndex = -1;
+
+      tablist.append(btn);
+    });
+
+    const wrapper = Object.assign(document.createElement('div'), { className: 'tablist-wrapper' });
+    wrapper.append(tablist);
+    this.prepend(wrapper);
+  }
+
+  #bindEvents() {
+    // 使用事件委托，只绑定一次
+    this.querySelector('[role="tablist"]')?.addEventListener('click', (e) => {
+      const tab = e.target.closest('[role="tab"]');
+      if (tab) this.#switchTo(tab);
+    });
+
+    this.querySelector('[role="tablist"]')?.addEventListener('keydown', (e) => {
+      const tab = e.target.closest('[role="tab"]');
+      if (!tab || !(e.key in KEY_MAP)) return;
+
+      e.preventDefault();
+      const i = this.#tabs.indexOf(tab);
+      const len = this.#tabs.length;
+
+      // Home → 0, End → last, Arrow → offset
+      const next =
+        e.key === 'Home' ? 0
+        : e.key === 'End' ? len - 1
+        : (i + KEY_MAP[e.key] + len) % len;
+
+      this.#switchTo(this.#tabs[next]);
+      this.#tabs[next].focus();
+    });
+  }
+
+  #switchTo(active) {
+    this.#tabs.forEach((t) => {
+      const selected = t === active;
+      t.setAttribute('aria-selected', String(selected));
+      t.tabIndex = selected ? 0 : -1;
+    });
+    this.#panels.forEach((p) => {
+      p.hidden = p.id !== active.getAttribute('aria-controls');
+    });
+  }
 }
+
+if (!customElements.get('x-tabs')) customElements.define('x-tabs', XTabs);
