@@ -298,6 +298,23 @@
   .prose .anchor-link:hover::after {
     @apply opacity-100 text-foreground font-mono;
   }
+
+  /* 文章链接悬浮下划线 */
+  .link-underline {
+    @apply relative inline-block;
+  }
+
+  .link-underline::after {
+    content: '';
+    @apply absolute left-0 bottom-0 w-full h-[2px] bg-primary/40;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .link-underline:hover::after,
+  .group:hover .link-underline::after {
+    transform: scaleX(1);
+  }
 }
 
 /* 自动滚动动画 */

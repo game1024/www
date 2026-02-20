@@ -85,8 +85,8 @@ function PostCard({ post }: { post: PostItem }) {
         className="block min-w-0 mb-1"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 className="text-sm sm:text-base font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1 decoration-primary/40 decoration-2 underline-offset-4 group-hover:underline">
-          {post.title}
+        <h3 className="text-sm sm:text-base font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1">
+          <span className="link-underline">{post.title}</span>
         </h3>
       </a>
 
