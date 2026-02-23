@@ -1,0 +1,4 @@
+{
+  "mdx.validate.validateReferences": "ignore",
+  "mdx.server.enable": false
+}

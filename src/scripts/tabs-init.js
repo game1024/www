@@ -35,10 +35,17 @@ class XTabs extends HTMLElement {
       Object.assign(panel, { id: panelId, hidden: i !== 0 });
       panel.setAttribute('aria-labelledby', tabId);
 
-      const btn = Object.assign(document.createElement('button'), {
-        id: tabId,
-        textContent: panel.dataset.label || `Tab ${i + 1}`,
-      });
+      const btn = document.createElement('button');
+      btn.id = tabId;
+      const icon = panel.dataset.icon;
+      if (icon) {
+        const img = document.createElement('img');
+        img.src = `https://api.iconify.design/${icon.replace(':', '/')}.svg`;
+        img.alt = '';
+        img.className = 'tab-icon';
+        btn.append(img);
+      }
+      btn.append(panel.dataset.label || `Tab ${i + 1}`);
       btn.setAttribute('role', 'tab');
       btn.setAttribute('aria-selected', String(i === 0));
       btn.setAttribute('aria-controls', panelId);

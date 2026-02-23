@@ -13,6 +13,7 @@ const tabItems = root.querySelectorAll('x-tab-item');
 
 interface Panel {
   label: string;
+  icon: string;
   panelId: string;
   tabId: string;
   content: string;
@@ -20,6 +21,7 @@ interface Panel {
 
 const panels: Panel[] = tabItems.map((item, idx) => ({
   label: item.getAttribute('data-label') || `Tab ${idx + 1}`,
+  icon: item.getAttribute('data-icon') || '',
   panelId: `tab-panel-${idx}`,
   tabId: `tab-${idx}`,
   content: item.innerHTML,
@@ -37,6 +39,7 @@ const panels: Panel[] = tabItems.map((item, idx) => ({
           aria-controls={panel.panelId}
           tabindex={idx !== 0 ? -1 : 0}
         >
+          {panel.icon && <img src={`https://api.iconify.design/${panel.icon.replace(':', '/')}.svg`} alt="" class="tab-icon" />}
           {panel.label}
         </button>
       ))}

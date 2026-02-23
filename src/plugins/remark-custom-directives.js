@@ -55,6 +55,19 @@ function getIconSVG(iconName) {
 }
 
 /**
+ * Tab 标签自动图标映射（label 小写 → icon）
+ */
+const tabAutoIcons = {
+  windows: 'ri:windows-fill',
+  macos: 'ri:apple-fill',
+  linux: 'ri:ubuntu-fill',
+  npm: 'vscode-icons:file-type-npm',
+  pnpm: 'vscode-icons:file-type-pnpm',
+  yarn: 'vscode-icons:file-type-yarn',
+  bun: 'vscode-icons:file-type-bun',
+};
+
+/**
  * remark 插件：将容器指令转换为自定义 HTML
  */
 export default function remarkCustomDirectives() {
@@ -109,9 +122,12 @@ export default function remarkCustomDirectives() {
 
         if (type === 'tab' && node.type === 'containerDirective') {
           const label = node.attributes?.label || 'Tab';
+          const icon = node.attributes?.icon || tabAutoIcons[label.toLowerCase()] || '';
           const data = node.data || (node.data = {});
           data.hName = 'div';
-          data.hProperties = h('div', { role: 'tabpanel', 'data-label': label }).properties;
+          const props = { role: 'tabpanel', 'data-label': label };
+          if (icon) props['data-icon'] = icon;
+          data.hProperties = h('div', props).properties;
           // 移除 remark-directive 生成的 label 段落
           node.children = node.children.filter(
             child => !(child.data && child.data.directiveLabel)
