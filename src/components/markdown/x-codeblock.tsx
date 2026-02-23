@@ -4,6 +4,7 @@ import React, { useEffect, useState, useCallback, useRef } from "react";
 import { codeToHtml, type BundledLanguage } from "shiki";
 import { Icon } from "@iconify/react";
 import { Button } from "@/components/ui/button";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { file2iconForTheme } from "@/lib/file-icons";
 
 export interface CodeBlockProps {
@@ -212,16 +213,19 @@ export function XCodeBlock({ code, language, title, frame, collapse, highlightLi
           )}
         </Button>
         <div className={isCollapsed ? "max-h-[calc(1.65rem*5+2rem)] overflow-hidden" : ""}>
-          {html ? (
-            <div
-              className="shiki-wrapper [&>pre]:p-4 [&>pre]:m-0 [&>pre]:overscroll-auto [&>pre]:overflow-x-auto [&>pre]:text-sm [&>pre]:leading-relaxed [&_code]:font-code [&_code]:block [&_code]:w-max [&_code]:min-w-full [&_span]:!no-underline [&_span]:![text-decoration:none]"
-              dangerouslySetInnerHTML={{ __html: html }}
-            />
-          ) : (
-            <pre className="p-4 text-sm leading-relaxed overflow-x-auto font-code">
-              <code>{code}</code>
-            </pre>
-          )}
+          <ScrollArea className="w-full">
+            {html ? (
+              <div
+                className="shiki-wrapper [&>pre]:p-4 [&>pre]:m-0 [&>pre]:text-sm [&>pre]:leading-relaxed [&_code]:font-code [&_code]:block [&_code]:w-max [&_code]:min-w-full [&_span]:!no-underline [&_span]:![text-decoration:none]"
+                dangerouslySetInnerHTML={{ __html: html }}
+              />
+            ) : (
+              <pre className="p-4 text-sm leading-relaxed font-code">
+                <code>{code}</code>
+              </pre>
+            )}
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
         </div>
         {needsCollapse && (
           <div

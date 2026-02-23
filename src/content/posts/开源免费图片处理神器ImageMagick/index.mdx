@@ -1,0 +1,71 @@
+---
+title: "开源免费图片处理神器ImageMagick"
+description: ""
+createdAt: 2026-02-23 12:55
+updatedAt: 2026-02-23 12:55
+category: "教程"
+tags: ["ImageMagick", "图片压缩", "图片处理"]
+---
+
+# 前言
+ImageMagick 是一个强大的开源图片处理工具，支持多种图片格式和丰富的功能。无论是简单的图片转换，还是复杂的图像编辑，ImageMagick 都能轻松应对。
+我经常使用它来做一些图片的大小调整和格式转换，效果非常好。下面是一些常用的 ImageMagick 命令示例。
+
+# 安装
+ImageMagick本身是跨平台的，可以在Windows和macOS上使用。
+
+::::tabs
+    :::tab{label="windows"}
+    在windows上可以使用winget安装
+    ```powershell
+    winget install ImageMagick.Q16
+    ```
+    :::
+    :::tab{label="macos"}
+    在macos上可以使用homebrew安装
+    ```bash
+    brew install imagemagick
+    :::
+::::
+
+
+# 调整长宽比例
+现在自媒体平台对图片的长宽比例有严格的要求，通常是`16:9`或者`4:3`。
+使用ImageMagick可以轻松调整图片的长宽比例。
+
+## 先缩放再裁剪
+如果想要先将图片等比缩放到满足长宽比例的要求，然后再裁剪掉多余的部分，可以使用以下命令：
+```bash
+# 将图片调整为16:9的长宽比例
+magick input.jpg -resize 1920x1080^ -gravity center -extent 1920x1080 output.jpg
+```
+
+- `^`：表示等比缩放，直到满足最小边的要求。
+- `-gravity center -extent`：居中裁剪
+
+## 添加黑色背景
+```bash
+magick input.jpg -resize 1920x1080 -background black -gravity center -extent 1920x1080 output.jpg
+```
+
+## 添加透明背景
+```bash
+magick input.jpg -resize 1920x1080 -background transparent -gravity center -extent 1920x1080 output.png
+```
+
+# 图片格式
+ImageMagick 支持多种图片格式，可以轻松进行格式转换。例如，将 JPG 转换为 PNG：
+```bash
+magick input.jpg output.png
+```
+
+也可以支持转换成 WebP 格式：
+```bash
+magick input.jpg output.webp
+```
+
+# 图片压缩
+ImageMagick 还可以用来压缩图片，减少文件大小。例如，使用以下命令将 JPG 图片压缩到 80% 的质量：
+```bash
+magick input.jpg -quality 80 output.jpg
+```
