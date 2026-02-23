@@ -39,10 +39,11 @@ class XTabs extends HTMLElement {
       btn.id = tabId;
       const icon = panel.dataset.icon;
       if (icon) {
+        const isMono = icon.startsWith('ri:') || icon === 'devicon:apple';
         const img = document.createElement('img');
         img.src = `https://api.iconify.design/${icon.replace(':', '/')}.svg`;
         img.alt = '';
-        img.className = 'tab-icon';
+        img.className = isMono ? 'tab-icon tab-icon-mono' : 'tab-icon';
         btn.append(img);
       }
       btn.append(panel.dataset.label || `Tab ${i + 1}`);

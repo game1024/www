@@ -39,7 +39,7 @@ const panels: Panel[] = tabItems.map((item, idx) => ({
           aria-controls={panel.panelId}
           tabindex={idx !== 0 ? -1 : 0}
         >
-          {panel.icon && <img src={`https://api.iconify.design/${panel.icon.replace(':', '/')}.svg`} alt="" class="tab-icon" />}
+          {panel.icon && <img src={`https://api.iconify.design/${panel.icon.replace(':', '/')}.svg`} alt="" class:list={['tab-icon', { 'tab-icon-mono': panel.icon.startsWith('ri:') || panel.icon === 'devicon:apple' }]} />}
           {panel.label}
         </button>
       ))}

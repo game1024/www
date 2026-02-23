@@ -58,9 +58,11 @@ function getIconSVG(iconName) {
  * Tab 标签自动图标映射（label 小写 → icon）
  */
 const tabAutoIcons = {
-  windows: 'ri:windows-fill',
-  macos: 'ri:apple-fill',
-  linux: 'ri:ubuntu-fill',
+  windows: 'devicon:windows11',
+  macos: 'devicon:apple',
+  linux: 'devicon:linux',
+  ubuntu: 'ri:ubuntu-fill',
+  centos: 'ri:centos-fill',
   npm: 'vscode-icons:file-type-npm',
   pnpm: 'vscode-icons:file-type-pnpm',
   yarn: 'vscode-icons:file-type-yarn',

@@ -605,6 +605,10 @@ x-tabs {
   display: inline-block;
 }
 
+.dark .tab-icon-mono {
+  filter: invert(1);
+}
+
 x-tabs [role="tabpanel"] {
   padding: 0.5rem 0;
 }
