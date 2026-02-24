@@ -1,17 +1,11 @@
 
+@import url("https://chinese-fonts-cdn.deno.dev/packages/lxgwwenkaibright/dist/LXGWBright-Regular/result.css");
+
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "./directives.css";
 
 @custom-variant dark (&:is(.dark *));
-
-@font-face {
-  font-family: 'LXGW WenKai';
-  font-style: normal;
-  font-display: swap;
-  font-weight: 400;
-  src: url(https://cdn.jsdelivr.net/fontsource/fonts/lxgw-wenkai@latest/latin-400-normal.woff2) format('woff2'), url(https://cdn.jsdelivr.net/fontsource/fonts/lxgw-wenkai@latest/latin-400-normal.woff) format('woff');
-}
 
 @theme inline {
   --font-sans: "LXGW WenKai", ui-sans-serif, system-ui, sans-serif;
