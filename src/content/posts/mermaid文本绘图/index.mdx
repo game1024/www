@@ -40,12 +40,14 @@ graph TD
 %%{init: {'flowchart': {'rankSpacing': 50}}}%%
 
 graph TD
-    subgraph " "
-        进栈
-        出栈
+    subgraph "缓冲区"
+        进栈 ~~~ 出栈
     end
-    进栈 --> A
-    A --> 出栈
+    
+    缓冲区 e1@==> A
+    A e2@==> 缓冲区
+    e1@{ animate: true }
+    e2@{ animate: true }
     A["head ^"] --> B[Node 2]
     B --> C[Node 3]
     C --> D[Node 4]
@@ -57,17 +59,24 @@ graph TD
 ```mermaid
 %%{init: {'flowchart': {'rankSpacing': 50}}}%%
 
-graph TD
-    subgraph " "
-        入队
-        出队
-    end
-    入队 --> A
-    E --> 出队
+graph TB
     A["head ^"] --> B[Node 2]
     B --> C[Node 3]
     C --> D[Node 4]
     D --> E["tail $"]
+
+    A e1@==> 出队
+    入队 e2@==> E
+
+    e1@{ animate: true }
+    e2@{ animate: true }
+
+    subgraph "缓冲区"
+        direction TB
+        出队 ~~~ spacer[ ] ~~~ 入队
+    end
+    style spacer fill:none,stroke:none
+
 ```
 
 ## 树
