@@ -1,0 +1,82 @@
+---
+title: "免费可靠的字体托管方案"
+description: "中文字体包体积庞大，直接托管成本高昂。本文介绍如何借助字图分包工具对字体进行子集化处理，再上传至 GitHub 公开仓库，最后通过 jsDelivr CDN 免费加速分发，实现零成本、高可用的自托管字体方案。"
+createdAt: 2026-02-25 00:29
+updatedAt: 2026-02-25 00:29
+category: "教程"
+tags: []
+---
+import 字体访问报错 from "./字体访问报错.webp";
+import jsdelivr from "./jsdelivr.webp";
+import Github字体仓库 from "./Github字体仓库.webp";
+import 字体分包工具 from "./字体分包工具.webp";
+import 字体分包文件 from "./字体分包文件.webp";
+import 上传Github仓库 from "./上传Github仓库.webp";
+import jsdelivrCDN from "./jsdelivrCDN.webp";
+import 最终效果 from "./最终效果.webp";
+
+import {Image} from "astro:assets";
+
+# 前言
+最近自己的博客在使用字图CDN时，被限流了，导致博客无法正常显示字体。所以就考虑自己部署一套字体，给自己的网站使用
+
+<Image src={字体访问报错} alt="字体访问报错" />
+
+# 字体托管方案
+一个中文字体包的大小通常在10+MB，如果将字体文件放在自己的服务器或者对象存储上，无疑会产生很大的带宽流量成本，为了节省成本，我们可以使用一些免费的公开CDN，比如jsdelivr
+
+jsdelivr拥有全球几千个节点，能够给国内和国外提供稳定的访问
+
+<Image src={jsdelivr} alt="jsdelivr" />
+
+## 托管流程
+
+:::steps
+1. 创建字体仓库
+
+   首先我们需要创建一个Github公开仓库，用来存放字体文件。
+   <Image src={Github字体仓库} alt="Github字体仓库" />
+
+2. 字体分包
+
+   由于字体包的体积较大，我们可以将字体文件进行分包，这样浏览文章的时候，浏览器会帮我们只加载需要的字体，从而达到节省带宽，优化博客访问速度的效果
+   
+   我这里使用的字图CDN的在线分包工具：https://chinese-font.netlify.app/zh-cn/online-split/
+
+   使用方法：将字体`.ttf`文件拖入，点击分包
+   <Image src={字体分包工具} alt="字体分包工具" class="mb-4"/>
+
+   分包完成后，会生成压缩包，里面包含了分包子集文件和用来导入字体的`result.css`文件
+   <Image src={字体分包文件} alt="字体分包文件"/>
+
+3. 上传字体分包文件到仓库
+   
+   将字体分包文件的目录整个上传到Github仓库中
+   <Image src={上传Github仓库} alt="上传Github仓库"/>
+
+4. 获取jsdelivr链接
+
+   jsdelivr官方CDN链接转换工具：https://www.jsdelivr.com/github
+   
+   将字体的`result.css`文件Github URL输入后，可以得到对应的jsdelivrCDN链接
+   <Image src={jsdelivrCDN} alt="jsdelivrCDN" />
+
+5. 在博客中引入jsdelivrCDN链接
+
+   在`global.css`中引入字体
+
+   ```css
+   @import url("https://cdn.jsdelivr.net/gh/game1024/web-fonts@main/LXGWBright/result.css");
+   
+   :root {
+      font-family: "LXGW Bright"
+   }
+   ```
+
+:::
+
+
+# 最终效果
+完成以上步骤后，我们的博客就能成功使用自托管字体了
+
+<Image src={最终效果} alt="最终效果" />

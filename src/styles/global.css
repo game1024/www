@@ -1,6 +1,5 @@
 
 @import url("https://cdn.jsdelivr.net/gh/game1024/web-fonts@main/LXGWBright/result.css");
-
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "./directives.css";
@@ -269,6 +268,16 @@
   /* 行内代码样式 */
   .prose :not(pre) > code {
     @apply bg-muted text-foreground font-code text-[0.875em] px-1.5 py-0.5 rounded-md border border-border;
+  }
+
+  /* 链接样式 */
+  .prose a:not(.anchor-link) {
+    @apply text-[var(--highlight)] font-medium no-underline
+      border-b border-[var(--highlight)]/30
+  }
+
+  .prose a:not(.anchor-link):hover {
+    @apply border-b-2 border-[var(--highlight)]/80;
   }
 
   /* 删除线样式 */
