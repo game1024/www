@@ -1,5 +1,5 @@
 
-@import url("https://chinese-fonts-cdn.deno.dev/packages/lxgwwenkaibright/dist/LXGWBright-Regular/result.css");
+@import url("https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css");
 
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -8,9 +8,9 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: "LXGW Bright", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "LXGW WenKai Lite", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;
-  --font-code: "Geist Mono", "LXGW Bright", ui-monospace, monospace;
+  --font-code: "Geist Mono", "LXGW WenKai Lite", ui-monospace, monospace;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
