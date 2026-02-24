@@ -10,7 +10,7 @@
 @theme inline {
   --font-sans: "LXGW Bright", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;
-  --font-code: "Geist Mono", "LXGW Bright, ui-monospace, monospace;
+  --font-code: "Geist Mono", "LXGW Bright", ui-monospace, monospace;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
