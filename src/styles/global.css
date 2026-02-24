@@ -5,10 +5,18 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@font-face {
+  font-family: 'LXGW WenKai';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(https://cdn.jsdelivr.net/fontsource/fonts/lxgw-wenkai@latest/latin-400-normal.woff2) format('woff2'), url(https://cdn.jsdelivr.net/fontsource/fonts/lxgw-wenkai@latest/latin-400-normal.woff) format('woff');
+}
+
 @theme inline {
-  --font-sans: "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "LXGW WenKai", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;
-  --font-code: "Geist Mono", "Noto Sans SC", ui-monospace, monospace;
+  --font-code: "Geist Mono", "LXGW WenKai", ui-monospace, monospace;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
