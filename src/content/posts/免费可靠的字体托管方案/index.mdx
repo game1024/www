@@ -4,7 +4,7 @@ description: "中文字体包体积庞大，直接托管成本高昂。本文介
 createdAt: 2026-02-25 00:29
 updatedAt: 2026-02-25 00:29
 category: "教程"
-tags: []
+tags: ["jsDelivr", "站点优化"]
 ---
 import 字体访问报错 from "./字体访问报错.webp";
 import jsdelivr from "./jsdelivr.webp";
@@ -22,14 +22,14 @@ import {Image} from "astro:assets";
 
 <Image src={字体访问报错} alt="字体访问报错" />
 
-# 字体托管方案
-一个中文字体包的大小通常在10+MB，如果将字体文件放在自己的服务器或者对象存储上，无疑会产生很大的带宽流量成本，为了节省成本，我们可以使用一些免费的公开CDN，比如jsdelivr
 
-jsdelivr拥有全球几千个节点，能够给国内和国外提供稳定的访问
-
-<Image src={jsdelivr} alt="jsdelivr" />
 
 ## 托管流程
+一个中文字体包的大小通常在10+MB，如果将字体文件放在自己的服务器或者对象存储上，无疑会产生很大的带宽流量成本，为了节省成本，我们可以使用一些免费的公开CDN，比如jsDelivr
+
+jsDelivr拥有全球几千个节点，能够给国内和国外提供稳定的访问
+
+<Image src={jsdelivr} alt="jsdelivr" />
 
 :::steps
 1. 创建字体仓库
@@ -39,12 +39,12 @@ jsdelivr拥有全球几千个节点，能够给国内和国外提供稳定的访
 
 2. 字体分包
 
-   由于字体包的体积较大，我们可以将字体文件进行分包，这样浏览文章的时候，浏览器会帮我们只加载需要的字体，从而达到节省带宽，优化博客访问速度的效果
+   然后我们可以将字体文件进行分包，这样浏览文章的时候，浏览器会帮我们只加载需要的字体，从而达到节省带宽，优化博客访问速度的效果
    
-   我这里使用的字图CDN的在线分包工具：https://chinese-font.netlify.app/zh-cn/online-split/
+   字图CDN的在线分包工具：https://chinese-font.netlify.app/zh-cn/online-split/
 
    使用方法：将字体`.ttf`文件拖入，点击分包
-   <Image src={字体分包工具} alt="字体分包工具" class="mb-4"/>
+   <Image src={字体分包工具} alt="字体分包工具" class="mb-8"/>
 
    分包完成后，会生成压缩包，里面包含了分包子集文件和用来导入字体的`result.css`文件
    <Image src={字体分包文件} alt="字体分包文件"/>
@@ -54,14 +54,14 @@ jsdelivr拥有全球几千个节点，能够给国内和国外提供稳定的访
    将字体分包文件的目录整个上传到Github仓库中
    <Image src={上传Github仓库} alt="上传Github仓库"/>
 
-4. 获取jsdelivr链接
+4. 获取jsDelivr链接
 
-   jsdelivr官方CDN链接转换工具：https://www.jsdelivr.com/github
+   jsDelivr官方CDN链接转换工具：https://www.jsdelivr.com/github
    
-   将字体的`result.css`文件Github URL输入后，可以得到对应的jsdelivrCDN链接
-   <Image src={jsdelivrCDN} alt="jsdelivrCDN" />
+   将字体的`result.css`文件Github URL输入后，可以得到对应的jsDelivr CDN链接
+   <Image src={jsdelivrCDN} alt="jsDelivrCDN" />
 
-5. 在博客中引入jsdelivrCDN链接
+5. 在博客中引入jsDelivr CDN链接
 
    在`global.css`中引入字体
 
