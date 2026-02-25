@@ -6,6 +6,20 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* medium-zoom overlay */
+:root {
+  --zoom-overlay: rgba(255, 255, 255, 0.95);
+}
+.dark {
+  --zoom-overlay: rgba(0, 0, 0, 0.85);
+}
+.medium-zoom-image--opened {
+  z-index: 999;
+}
+.medium-zoom-overlay {
+  z-index: 998;
+}
+
 @theme inline {
   --font-sans: "LXGW Bright", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;
