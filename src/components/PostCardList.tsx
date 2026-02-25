@@ -69,10 +69,6 @@ function PostCard({ post }: { post: PostItem }) {
             {formatDate(post.createdAt)}
           </span>
           <span className="hidden sm:inline-flex items-center gap-0.5">
-            <Icon icon="ri:file-text-line" className="size-3 shrink-0" />
-            {formatWordCount(post.wordCount)}
-          </span>
-          <span className="hidden sm:inline-flex items-center gap-0.5">
             <Icon icon="ri:time-line" className="size-3 shrink-0" />
             {formatReadingTime(post.wordCount)}
           </span>

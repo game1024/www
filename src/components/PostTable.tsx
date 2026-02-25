@@ -17,7 +17,6 @@ export interface PostItem {
   title: string;
   category?: string;
   tags?: string[];
-  wordCount: number;
   createdAt: string; // ISO string
 }
 
@@ -66,28 +65,21 @@ export function PostTable({ posts, pageSize = 10 }: PostTableProps) {
     });
   }
 
-  function formatWordCount(count: number) {
-    if (count >= 10000) return `${(count / 10000).toFixed(1)}万`;
-    if (count >= 1000) return `${(count / 1000).toFixed(1)}k`;
-    return `${count}`;
-  }
-
   return (
     <div className="space-y-4">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[40%]">标题</TableHead>
-            <TableHead className="w-[12%]">分类</TableHead>
-            <TableHead className="w-[24%]">标签</TableHead>
-            <TableHead className="w-[10%] text-right">字数</TableHead>
-            <TableHead className="w-[14%] text-right">发表日期</TableHead>
+            <TableHead className="w-[45%]">标题</TableHead>
+            <TableHead className="w-[14%]">分类</TableHead>
+            <TableHead className="w-[25%]">标签</TableHead>
+            <TableHead className="w-[16%] text-right">发表日期</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {paginatedPosts.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
+              <TableCell colSpan={4} className="h-24 text-center text-muted-foreground">
                 暂无文章
               </TableCell>
             </TableRow>
@@ -115,9 +107,6 @@ export function PostTable({ posts, pageSize = 10 }: PostTableProps) {
                       </Badge>
                     ))}
                   </div>
-                </TableCell>
-                <TableCell className="text-right text-muted-foreground tabular-nums">
-                  {formatWordCount(post.wordCount)}
                 </TableCell>
                 <TableCell className="text-right text-muted-foreground tabular-nums">
                   {formatDate(post.createdAt)}

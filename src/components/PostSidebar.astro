@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Icon } from 'astro-icon/components';
 import Marquee from './Marquee.astro';
 
 export interface Props {
@@ -38,19 +39,45 @@ const recentPosts = allPosts
       </div>
 
       <!-- 文章列表 -->
-      <div class="space-y-1">
+      <div class="space-y-2.5">
         {recentPosts.map((post) => {
           const isActive = currentSlug === post.slug;
           return (
             <a
               href={`/posts/${post.slug}`}
               class:list={[
-                "block py-1.5 px-2 rounded-md transition-all duration-200 group",
+                "block p-3 rounded-lg border transition-all duration-200 group",
                 isActive
-                  ? "bg-primary/10 text-primary"
-                  : "hover:bg-muted"
+                  ? "bg-primary/10 border-primary/30 text-primary shadow-sm"
+                  : "border-border hover:bg-muted hover:border-muted-foreground/20 hover:shadow-sm"
               ]}
             >
+              <div class="flex items-center justify-between mb-1.5">
+                {post.data.category && (
+                  <span class:list={[
+                    "inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-medium",
+                    isActive
+                      ? "bg-primary/15 text-primary"
+                      : "bg-secondary text-secondary-foreground"
+                  ]}>
+                    <Icon name="ri:stack-line" class="size-3" />
+                    {post.data.category}
+                  </span>
+                )}
+                <time
+                  datetime={post.data.createdAt.toISOString()}
+                  class:list={[
+                    "text-[10px] text-muted-foreground",
+                    !post.data.category && "ml-auto"
+                  ]}
+                >
+                  {post.data.createdAt.toLocaleDateString('zh-CN', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                  })}
+                </time>
+              </div>
               <div class="overflow-hidden">
                 <Marquee
                   text={post.data.title}
@@ -61,21 +88,6 @@ const recentPosts = allPosts
                   ]}
                   duration={3}
                 />
-              </div>
-              <div class="flex items-center gap-1.5 text-[11px] text-muted-foreground mt-0.5">
-                <time datetime={post.data.createdAt.toISOString()}>
-                  {post.data.createdAt.toLocaleDateString('zh-CN', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                  })}
-                </time>
-                {post.data.category && (
-                  <>
-                    <span>·</span>
-                    <span>{post.data.category}</span>
-                  </>
-                )}
               </div>
             </a>
           );
