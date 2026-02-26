@@ -1,0 +1,7 @@
+@import url("https://cdn.jsdelivr.net/gh/game1024/web-fonts@main/LXGWBright/result.css");
+@import url("https://giscus.app/default.css");
+
+main {
+  font-family: "LXGW Bright", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Helvetica, Arial, sans-serif;
+}
