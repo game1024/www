@@ -6,7 +6,7 @@ export interface Props {
 const { class: className } = Astro.props;
 ---
 
-<div class:list={["giscus-wrapper mt-8", className]}>
+<div class:list={["giscus-wrapper mt-8 w-full", className]}>
   <div class="giscus"></div>
 </div>
 
@@ -32,7 +32,7 @@ const { class: className } = Astro.props;
     script.setAttribute("data-reactions-enabled", "1");
     script.setAttribute("data-emit-metadata", "0");
     script.setAttribute("data-input-position", "top");
-    script.setAttribute("data-theme", isDark ? "dark" : "light");
+    script.setAttribute("data-theme", isDark ? "https://cdn.jsdelivr.net/gh/game1024/www@main/public/giscus-dark.css" : "https://cdn.jsdelivr.net/gh/game1024/www@main/public/giscus-light.css");
     script.setAttribute("data-lang", "zh-CN");
     script.setAttribute("data-loading", "lazy");
     script.setAttribute("crossorigin", "anonymous");
@@ -48,7 +48,7 @@ const { class: className } = Astro.props;
       const iframe = document.querySelector<HTMLIFrameElement>("iframe.giscus-frame");
       if (iframe) {
         iframe.contentWindow?.postMessage(
-          { giscus: { setConfig: { theme: isDark ? "dark" : "light" } } },
+          { giscus: { setConfig: { theme: isDark ? "https://cdn.jsdelivr.net/gh/game1024/www@main/public/giscus-dark.css" : "https://cdn.jsdelivr.net/gh/game1024/www@main/public/giscus-light.css" } } },
           "https://giscus.app"
         );
       }
@@ -61,7 +61,7 @@ const { class: className } = Astro.props;
       const script = document.querySelector("script[src*='giscus.app']");
       const isDark = document.documentElement.classList.contains("dark");
       if (script) {
-        script.setAttribute("data-theme", isDark ? "dark" : "light");
+        script.setAttribute("data-theme", isDark ? "https://cdn.jsdelivr.net/gh/game1024/www@main/public/giscus-dark.css" : "https://cdn.jsdelivr.net/gh/game1024/www@main/public/giscus-light.css");
       }
     });
     themeObserver.observe(document.documentElement, {
