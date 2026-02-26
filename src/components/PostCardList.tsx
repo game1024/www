@@ -23,11 +23,7 @@ interface PostCardListProps {
 
 function formatDate(iso: string) {
   const d = new Date(iso);
-  return d.toLocaleDateString("zh-CN", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  });
+  return `${d.getFullYear()}年${String(d.getMonth() + 1).padStart(2, '0')}月${String(d.getDate()).padStart(2, '0')}日`;
 }
 
 function formatWordCount(count: number) {
@@ -64,13 +60,13 @@ function PostCard({ post }: { post: PostItem }) {
           )}
         </div>
         <div className="shrink-0 flex items-center gap-2 text-[11px] text-muted-foreground tabular-nums leading-none">
-          <span className="inline-flex items-center gap-0.5">
-            <Icon icon="ri:calendar-line" className="size-3 shrink-0" />
-            {formatDate(post.createdAt)}
-          </span>
           <span className="hidden sm:inline-flex items-center gap-0.5">
             <Icon icon="ri:time-line" className="size-3 shrink-0" />
             {formatReadingTime(post.wordCount)}
+          </span>
+          <span className="inline-flex items-center gap-0.5">
+            <Icon icon="ri:calendar-line" className="size-3 shrink-0" />
+            {formatDate(post.createdAt)}
           </span>
         </div>
       </div>

@@ -49,7 +49,7 @@ const recentPosts = allPosts
                 "block p-3 rounded-lg border transition-all duration-200 group",
                 isActive
                   ? "bg-primary/10 border-primary/30 text-primary shadow-sm"
-                  : "border-border hover:bg-muted hover:border-muted-foreground/20 hover:shadow-sm"
+                  : "border-border"
               ]}
             >
               <div class="flex items-center justify-between mb-1.5">
@@ -71,11 +71,7 @@ const recentPosts = allPosts
                     !post.data.category && "ml-auto"
                   ]}
                 >
-                  {post.data.createdAt.toLocaleDateString('zh-CN', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                  })}
+                  {`${post.data.createdAt.getFullYear()}年${String(post.data.createdAt.getMonth() + 1).padStart(2, '0')}月${String(post.data.createdAt.getDate()).padStart(2, '0')}日`}
                 </time>
               </div>
               <div class="overflow-hidden">
@@ -84,7 +80,7 @@ const recentPosts = allPosts
                   tag="h3"
                   class:list={[
                     "text-sm font-medium",
-                    isActive ? "text-primary" : "text-foreground group-hover:text-foreground"
+                    isActive ? "text-primary" : "text-foreground"
                   ]}
                   duration={3}
                 />
@@ -104,3 +100,10 @@ const recentPosts = allPosts
     </div>
   </ScrollArea>
 </aside>
+
+<style is:global>
+  a.group:hover marquee-text h3 {
+    text-decoration: underline;
+    font-weight: 700;
+  }
+</style>

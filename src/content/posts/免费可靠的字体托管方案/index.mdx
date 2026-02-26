@@ -20,7 +20,7 @@ import {Image} from "astro:assets";
 # 前言
 最近自己的博客在使用字图CDN时，被限流了，导致博客无法正常显示字体。所以就考虑自己部署一套字体，给自己的网站使用
 
-<Image src={字体访问报错} alt="字体访问报错" width="800"/>
+<Image src={字体访问报错} alt="字体访问报错" />
 
 
 
@@ -29,7 +29,7 @@ import {Image} from "astro:assets";
 
 jsDelivr拥有全球几千个节点，能够给国内和国外提供稳定的访问
 
-<Image src={jsdelivr} alt="jsdelivr" width="800"/>
+<Image src={jsdelivr} alt="jsdelivr" width="1200"/>
 
 :::steps
 1. **创建字体仓库**
@@ -44,10 +44,10 @@ jsDelivr拥有全球几千个节点，能够给国内和国外提供稳定的访
    字图CDN的在线分包工具：https://chinese-font.netlify.app/zh-cn/online-split/
 
    使用方法：将字体`.ttf`文件拖入，点击分包
-   <Image src={字体分包工具} alt="字体分包工具" width="800" class="mb-8"/>
+   <Image src={字体分包工具} alt="字体分包工具" class="mb-8"/>
 
    分包完成后，会生成压缩包，里面包含了分包子集文件和用来导入字体的`result.css`文件
-   <Image src={字体分包文件} alt="字体分包文件" width="800"/>
+   <Image src={字体分包文件} alt="字体分包文件"/>
 
 3. **上传字体分包文件到仓库**
    
@@ -59,7 +59,7 @@ jsDelivr拥有全球几千个节点，能够给国内和国外提供稳定的访
    jsDelivr官方CDN链接转换工具：https://www.jsdelivr.com/github
    
    将字体的`result.css`文件Github URL输入后，可以得到对应的jsDelivr CDN链接
-   <Image src={jsdelivrCDN} alt="jsDelivrCDN" width="800"/>
+   <Image src={jsdelivrCDN} alt="jsDelivrCDN" width="1200"/>
 
 5. **在博客中引入jsDelivr CDN链接**
 
@@ -79,4 +79,4 @@ jsDelivr拥有全球几千个节点，能够给国内和国外提供稳定的访
 # 最终效果
 完成以上步骤后，我们的博客就能成功使用自托管字体了
 
-<Image src={最终效果} alt="最终效果" width="800"/>
+<Image src={最终效果} alt="最终效果" />
