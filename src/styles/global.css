@@ -7,12 +7,6 @@
 @custom-variant dark (&:is(.dark *));
 
 /* medium-zoom overlay */
-:root {
-  --zoom-overlay: rgba(255, 255, 255, 0.95);
-}
-.dark {
-  --zoom-overlay: rgba(0, 0, 0, 0.85);
-}
 .medium-zoom-image--opened {
   z-index: 999;
 }
@@ -114,6 +108,7 @@
   --container-caution: oklch(0.6 0.2 25);
   --container-code-bg: rgba(0, 0, 0, 0.05);
   --github-card-hover-shadow: rgba(0, 0, 0, 0.06);
+  --zoom-overlay: rgba(255, 255, 255, 0.95);
 }
 
 .dark {
@@ -165,6 +160,7 @@
   --container-caution: oklch(0.65 0.2 25);
   --container-code-bg: rgba(255, 255, 255, 0.1);
   --github-card-hover-shadow: rgba(0, 0, 0, 0.3);
+  --zoom-overlay: rgba(0, 0, 0, 0.85);
 }
 
 @layer base {
@@ -291,7 +287,7 @@
   }
 
   .prose a:not(.anchor-link):hover {
-    @apply border-b-2 border-[var(--highlight)]/80;
+    @apply border-[var(--highlight)]/80;
   }
 
   /* 删除线样式 */
