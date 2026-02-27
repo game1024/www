@@ -14,10 +14,6 @@
   z-index: 998;
 }
 
-.gsc-comment-box {
-  width: 99%
-}
-
 @theme inline {
   --font-sans: "LXGW Bright", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;

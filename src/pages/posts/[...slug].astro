@@ -110,10 +110,10 @@ const readingTime = Math.ceil((chineseChars / 300 + englishWords / 200));
 
 <script>
   const UMAMI = {
-    base: 'https://umami.fiofio.cn',
-    siteId: '7112cd31-a843-4d71-b87f-72f1b39353e6',
-    user: 'game1024',
-    pass: 'game1024',
+    base: import.meta.env.PUBLIC_UMAMI_BASE_URL,
+    siteId: import.meta.env.PUBLIC_UMAMI_SITE_ID,
+    user: import.meta.env.PUBLIC_UMAMI_USERNAME,
+    pass: import.meta.env.PUBLIC_UMAMI_PASSWORD,
   };
 
   async function getToken() {
