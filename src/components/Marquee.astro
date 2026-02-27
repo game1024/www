@@ -23,10 +23,9 @@ const {
 
 <marquee-text 
   data-duration={duration} 
-  class={className}
   style={maskColor ? `--marquee-mask-color: ${maskColor}` : undefined}
 >
-  <Tag class="inline-block whitespace-nowrap">
+  <Tag class:list={["inline-block whitespace-nowrap", className]}>
     {text}
   </Tag>
 </marquee-text>
