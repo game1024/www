@@ -172,8 +172,7 @@ macos系统对应用的权限控制非常严格，一开始我在调试的时候
 ## windows
 
 ### MSIX自启动
-打包windows应用时，我选择了msix格式，这样可以省去购买ov签名的费用，同时不需要自己托管安装包的下载
-
+打包windows应用时，我选择了msix格式，这样可以省去购买ov签名的费用，同时不需要自己托管安装包的下载。
 不过msix打包tauri应用的时候，我发现tauri-autostart插件无法正常生效，需要手动在程序清单文件中加入微软官方的自启动插件
 
 ```xml title="Package.appxmanifest" {3,6-10} focus
