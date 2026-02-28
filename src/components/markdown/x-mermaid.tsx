@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import mermaid from "mermaid";
+import zenuml from "@mermaid-js/mermaid-zenuml";
 import { Icon } from "@iconify/react";
 import { Button } from "@/components/ui/button";
 import { DiagramOverlay } from "./diagram-overlay";
@@ -24,21 +26,8 @@ export function XMermaid({ source }: MermaidBlockProps) {
       if (!containerRef.current) return;
 
       try {
-        const [{ default: mermaid }, zenuml] = await Promise.all([
-          import(
-            /* @vite-ignore */
-            "https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.esm.min.mjs"
-          ),
-          import(
-            /* @vite-ignore */
-            "https://cdn.jsdelivr.net/npm/@mermaid-js/mermaid-zenuml@0.2.0/dist/mermaid-zenuml.esm.min.mjs"
-          ),
-        ]);
-
         if (cancelled) return;
-
-        await mermaid.registerExternalDiagrams([zenuml.default]);
-
+        await mermaid.registerExternalDiagrams([zenuml]);
         const isDark = document.documentElement.classList.contains("dark");
         mermaid.initialize({
           startOnLoad: false,
@@ -58,12 +47,9 @@ export function XMermaid({ source }: MermaidBlockProps) {
           }),
           securityLevel: "loose",
         });
-
         const id = `mermaid-${Math.random().toString(36).slice(2, 9)}`;
         const { svg } = await mermaid.render(id, source);
-
         if (cancelled || !containerRef.current) return;
-
         containerRef.current.innerHTML = svg;
         setSvgHtml(svg);
       } catch (e) {
