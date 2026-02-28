@@ -184,7 +184,9 @@ import TabItem from '@/components/markdown/TabItem.astro'
 可以在代码块的语法中使用`{ }`高亮指定行，支持单行高亮和多行高亮
 ::::tabs
   :::tab{label="效果预览"}
-  ```cpp title="main.cpp" {2,4-6}
+  ```cpp title="main.cpp" {1,4-5}
+  #include <stdio.h>
+
   int main () {
     printf("Hello, World!\n");
     return 0;
@@ -193,7 +195,9 @@ import TabItem from '@/components/markdown/TabItem.astro'
   :::
   :::tab{label="代码"}
   ````markdown
-  ```cpp title="main.cpp" {2,4-6}
+  ```cpp title="main.cpp" {1,4-5}
+  #include <stdio.h>
+
   int main () {
     printf("Hello, World!\n");
     return 0;
@@ -225,6 +229,34 @@ import TabItem from '@/components/markdown/TabItem.astro'
   :::
 ::::
 
+## 专注模式
+当添加`focus`属性后，代码块将进入专注模式，未高亮的行会降低透明度
+
+::::tabs
+  :::tab{label="效果预览"}
+  ```cpp title="main.cpp" {1,4-5} focus
+  #include <stdio.h>
+
+  int main () {
+    printf("Hello, World!\n");
+    return 0;
+  }
+  ```
+  :::
+  :::tab{label="代码"}
+  ````markdown
+  ```cpp title="main.cpp" {1,4-5} focus
+  #include <stdio.h>
+
+  int main () {
+    printf("Hello, World!\n");
+    return 0;
+  }
+  ```
+  ````
+  :::
+::::
+
 ## 标记关键词
 可以在代码块的语法中使用`mark=/regex/flags`来标记关键词
 ::::tabs
@@ -239,6 +271,40 @@ import TabItem from '@/components/markdown/TabItem.astro'
   :::tab{label="代码"}
   ````markdown
   ```cpp title="main.cpp" mark=/printf/g
+  int main () {
+    printf("Hello, World!\n");
+    return 0;
+  }
+  ```
+  ````
+  :::
+::::
+
+## 行号
+可以在代码块的语法中添加`lineno`来显示行号
+
+::::tabs
+  :::tab{label="效果预览"}
+  ```cpp title="main.cpp" del={1,4-5} lineno
+  #include <stdio.h>
+
+  int main () {
+    printf("Hello, World!\n");
+    printf("Hello, World!\n");
+    printf("Hello, World!\n");
+    printf("Hello, World!\n");
+    printf("Hello, World!\n");
+    printf("Hello, World!\n");    
+    
+    return 0;
+  }
+  ```
+  :::
+  :::tab{label="代码"}
+  ````markdown
+  ```cpp title="main.cpp" {1,4-5} lineno
+  #include <stdio.h>
+
   int main () {
     printf("Hello, World!\n");
     return 0;

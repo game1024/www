@@ -76,6 +76,8 @@ function processCodeBlocks() {
       const delLines = pre.getAttribute('data-del-lines') || undefined;
       const mark = pre.getAttribute('data-mark') || undefined;
       const markFlags = pre.getAttribute('data-mark-flags') || undefined;
+      const focusAttr = pre.getAttribute('data-focus');
+      const linenoAttr = pre.getAttribute('data-lineno');
       
       component = createElement(XCodeBlock, {
         code: codeText.trim(),
@@ -87,7 +89,9 @@ function processCodeBlocks() {
         mark,
         markFlags,
         ...(frameAttr !== null && { frame: frameAttr === 'true' }),
-        ...(collapseAttr !== null && { collapse: collapseAttr === 'true' })
+        ...(collapseAttr !== null && { collapse: collapseAttr === 'true' }),
+        ...(focusAttr !== null && { focus: focusAttr === 'true' }),
+        ...(linenoAttr !== null && { lineno: linenoAttr === 'true' })
       });
     }
 

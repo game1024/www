@@ -29,14 +29,14 @@ export default function rehypeCodeMeta() {
       }
 
       // 提取 frame 开关
-      const frameMatch = meta.match(/frame(?:\s*=\s*["']?(true|false)["']?)?/);
+      const frameMatch = meta.match(/frame(?:\s*=\s*[{"']?(true|false)[}"']?)?/);
       if (frameMatch) {
         node.properties = node.properties || {};
         node.properties['data-frame'] = frameMatch[1] !== 'false' ? 'true' : 'false';
       }
 
       // 提取 collapse 开关
-      const collapseMatch = meta.match(/collapse(?:\s*=\s*["']?(true|false)["']?)?/);
+      const collapseMatch = meta.match(/collapse(?:\s*=\s*[{"']?(true|false)[}"']?)?/);
       if (collapseMatch) {
         node.properties = node.properties || {};
         node.properties['data-collapse'] = collapseMatch[1] !== 'false' ? 'true' : 'false';
@@ -60,6 +60,18 @@ export default function rehypeCodeMeta() {
       if (delMatch) {
         node.properties = node.properties || {};
         node.properties['data-del-lines'] = delMatch[1].replace(/\s/g, '');
+      }      // 提取 lineno 开关
+      const linenoMatch = meta.match(/lineno(?:\s*=\s*[{"']?(true|false)[}"']?)?/);
+      if (linenoMatch) {
+        node.properties = node.properties || {};
+        node.properties['data-lineno'] = linenoMatch[1] !== 'false' ? 'true' : 'false';
+      }
+
+      // 提取 focus 开关
+      const focusMatch = meta.match(/focus(?:\s*=\s*[{"']?(true|false)[}"']?)?/);
+      if (focusMatch) {
+        node.properties = node.properties || {};
+        node.properties['data-focus'] = focusMatch[1] !== 'false' ? 'true' : 'false';
       }
       // 提取关键词高亮 mark=/regex/ 或 mark=/regex/flags
       const markMatch = meta.match(/mark\s*=\s*\/((?:[^/\\]|\\.)*)\/([gimsuy]*)/);

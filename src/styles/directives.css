@@ -31,6 +31,7 @@
 /* Note - 蓝色 */
 .custom-container.note {
   border-color: var(--container-note);
+  color: var(--container-note-text);
 }
 
 .custom-container.note .container-title {
@@ -40,6 +41,7 @@
 /* Tip - 青绿色 */
 .custom-container.tip {
   border-color: var(--container-tip);
+  color: var(--container-tip-text);
 }
 
 .custom-container.tip .container-title {
@@ -49,6 +51,7 @@
 /* Important - 紫色 */
 .custom-container.important {
   border-color: var(--container-important);
+  color: var(--container-important-text);
 }
 
 .custom-container.important .container-title {
@@ -58,6 +61,7 @@
 /* Warning - 黄色 */
 .custom-container.warning {
   border-color: var(--container-warning);
+  color: var(--container-warning-text);
 }
 
 .custom-container.warning .container-title {
@@ -67,6 +71,7 @@
 /* Caution - 红色 */
 .custom-container.caution {
   border-color: var(--container-caution);
+  color: var(--container-caution-text);
 }
 
 .custom-container.caution .container-title {
@@ -76,6 +81,7 @@
 /* 容器内的段落样式 */
 .custom-container p {
   margin: 0.5rem 0;
+  font-weight: 300;
 }
 
 .custom-container p:first-of-type {

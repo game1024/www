@@ -13,6 +13,8 @@ export interface CodeBlockProps {
   title?: string;
   frame?: boolean;
   collapse?: boolean;
+  focus?: boolean;
+  lineno?: boolean;
   highlightLines?: string;
   insLines?: string;
   delLines?: string;
@@ -41,7 +43,7 @@ function parseHighlightLines(raw?: string): Set<number> {
   return set;
 }
 
-export function XCodeBlock({ code, language, title, frame, collapse, highlightLines, insLines, delLines, mark, markFlags }: CodeBlockProps) {
+export function XCodeBlock({ code, language, title, frame, collapse, focus, lineno, highlightLines, insLines, delLines, mark, markFlags }: CodeBlockProps) {
   const [html, setHtml] = useState<string>("");
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -58,6 +60,9 @@ export function XCodeBlock({ code, language, title, frame, collapse, highlightLi
   const shellLang = language === "bash" || language === "powershell";
   const showFrame = frame !== undefined ? frame : (!!title || shellLang);
   const displayTitle = title || (shellLang ? language : undefined);
+
+  // focus 模式：当 focus=true 且存在高亮行时启用
+  const hasFocusLines = focus === true && (!!highlightLines || !!insLines || !!delLines);
 
   // 监听主题变化
   useEffect(() => {
@@ -216,7 +221,7 @@ export function XCodeBlock({ code, language, title, frame, collapse, highlightLi
           <ScrollAreaTable className="w-full">
             {html ? (
               <div
-                className="shiki-wrapper [&>pre]:p-4 [&>pre]:m-0 [&>pre]:text-sm [&>pre]:leading-relaxed [&_code]:font-code [&_code]:block [&_code]:w-max [&_code]:min-w-full [&_span]:!no-underline [&_span]:![text-decoration:none]"
+                className={`shiki-wrapper [&>pre]:p-4 [&>pre]:m-0 [&>pre]:text-sm [&>pre]:leading-relaxed [&_code]:font-code [&_code]:block [&_code]:w-max [&_code]:min-w-full [&_span]:!no-underline [&_span]:![text-decoration:none]${hasFocusLines ? ' has-focus' : ''}${lineno ? ' has-lineno' : ''}`}
                 dangerouslySetInnerHTML={{ __html: html }}
               />
             ) : (
