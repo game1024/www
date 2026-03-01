@@ -177,3 +177,82 @@
   border-radius: 50%;
   flex-shrink: 0;
 }
+
+/* ── Chat 对话组件样式 ─────────────────── */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+}
+
+.chat-message {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  letter-spacing: 0.03em;
+  max-width: 95%;
+}
+
+.chat-user {
+  align-self: flex-end;
+  background: var(--accent);
+  border-radius: var(--radius-md) var(--radius-md) 0 var(--radius-md);
+}
+
+.chat-user .chat-role {
+  justify-content: flex-end;
+}
+
+.chat-ai {
+  align-self: stretch;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md) var(--radius-md) var(--radius-md) 0;
+}
+
+.chat-role {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  margin-bottom: 0.125rem;
+}
+
+.chat-role svg {
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+/* chat 内段落间距 */
+.chat-message p {
+  margin: 0.25rem 0;
+}
+
+.chat-message p:first-of-type {
+  margin-top: 0;
+}
+
+.chat-message p:last-child {
+  margin-bottom: 0;
+}
+
+/* chat 内代码块 */
+.chat-message :not(pre) > code {
+  background: var(--container-code-bg);
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+  font-size: 0.9em;
+}

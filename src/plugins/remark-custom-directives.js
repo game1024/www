@@ -83,6 +83,54 @@ export default function remarkCustomDirectives() {
       ) {
         const type = node.name;
 
+        // ── chat 容器指令 ─────────────────────
+        if (type === 'chat' && node.type === 'containerDirective') {
+          const data = node.data || (node.data = {});
+          data.hName = 'div';
+          data.hProperties = h('div', { class: 'chat-container' }).properties;
+          return;
+        }
+
+        // ── user 消息指令 ────────────────────
+        if (type === 'user' && node.type === 'containerDirective') {
+          const data = node.data || (node.data = {});
+          data.hName = 'div';
+          data.hProperties = h('div', { class: 'chat-message chat-user' }).properties;
+          // 添加角色标签
+          node.children.unshift({
+            type: 'paragraph',
+            data: {
+              hName: 'div',
+              hProperties: { class: 'chat-role' },
+            },
+            children: [
+              { type: 'html', value: getIconSVG('ri:user-line') },
+              { type: 'text', value: 'User' },
+            ],
+          });
+          return;
+        }
+
+        // ── ai 消息指令 ──────────────────────
+        if (type === 'ai' && node.type === 'containerDirective') {
+          const data = node.data || (node.data = {});
+          data.hName = 'div';
+          data.hProperties = h('div', { class: 'chat-message chat-ai' }).properties;
+          // 添加角色标签
+          node.children.unshift({
+            type: 'paragraph',
+            data: {
+              hName: 'div',
+              hProperties: { class: 'chat-role' },
+            },
+            children: [
+              { type: 'html', value: getIconSVG('ri:robot-2-line') },
+              { type: 'text', value: 'AI' },
+            ],
+          });
+          return;
+        }
+
         // ── steps 容器指令 ──────────────────────
         if (type === 'steps' && node.type === 'containerDirective') {
           const data = node.data || (node.data = {});

@@ -7,9 +7,11 @@ updatedAt: 2026-02-10 0:20
 category: "教程"
 tags: ["指南", "入门"]
 ---
-
+import {Image} from "astro:assets";
 import Tabs from '@/components/markdown/Tabs.astro'
 import TabItem from '@/components/markdown/TabItem.astro'
+
+import 搜索引擎架构 from "./搜索引擎架构.webp";
 
 # 有序列表
 ::::tabs
@@ -675,3 +677,35 @@ data
   ````
   ::::
 :::::
+
+
+## AIChat
+::::chat
+
+:::user
+你好，请帮我写一段hello world程序
+:::
+
+:::ai
+当然，下面是 c 实现：
+
+```c title="main.c"
+#include <stdio.h>
+
+int main() {
+    printf("Hello, World!\n");
+    return 0;
+}
+```
+:::
+
+:::user
+我想要一张搜索引擎架构图
+:::
+
+
+:::ai
+你好，已经帮你生成完毕，以下是一张搜索引擎架构图：
+<Image src={搜索引擎架构} alt="搜索引擎架构" width="800"/>
+:::
+::::
