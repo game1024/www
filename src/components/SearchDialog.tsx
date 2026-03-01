@@ -170,11 +170,11 @@ export function SearchDialog() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
           showCloseButton={false}
-          className="sm:max-w-xl p-0 gap-0 overflow-hidden top-[20%] translate-y-0"
+          className="sm:max-w-xl p-0 gap-0 overflow-hidden top-[20%] translate-y-0 dark:bg-[oklch(0.21_0_0)] dark:border-[oklch(1_0_0/15%)] dark:shadow-[0_16px_70px_rgba(0,0,0,0.5)]"
         >
           <DialogTitle className="sr-only">搜索文章</DialogTitle>
           {/* Search Input */}
-          <div className="flex items-center border-b px-3">
+          <div className="flex items-center border-b px-3 dark:border-b-[oklch(1_0_0/10%)]">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -291,7 +291,7 @@ export function SearchDialog() {
           </ScrollArea>
 
           {/* Footer */}
-          <div className="flex items-center justify-between border-t px-3 py-2 text-xs text-muted-foreground">
+          <div className="flex items-center justify-between border-t px-3 py-2 text-xs text-muted-foreground dark:border-t-[oklch(1_0_0/10%)] dark:bg-[oklch(0.18_0_0)]">
             <div className="flex items-center gap-3">
               <span className="flex items-center gap-1">
                 <kbd className="rounded border bg-muted px-1 py-0.5 font-mono text-[10px]">↑↓</kbd>

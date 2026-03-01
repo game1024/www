@@ -92,7 +92,7 @@ function PostCard({ post }: { post: PostItem }) {
   );
 }
 
-export function PostCardList({ posts, pageSize = 6, title }: PostCardListProps) {
+export function PostCardList({ posts, pageSize = 12, title }: PostCardListProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(posts.length / pageSize);
 

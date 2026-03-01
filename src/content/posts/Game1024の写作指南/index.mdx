@@ -680,32 +680,72 @@ data
 
 
 ## AIChat
-::::chat
 
-:::user
-你好，请帮我写一段hello world程序
-:::
+::::::tabs
+  :::::tab{label="效果预览"}
+    ::::chat
 
-:::ai
-当然，下面是 c 实现：
+    :::user
+    你好，请帮我写一段hello world程序
+    :::
 
-```c title="main.c"
-#include <stdio.h>
+    :::ai
+    当然，下面是 c 实现：
 
-int main() {
-    printf("Hello, World!\n");
-    return 0;
-}
-```
-:::
+    ```c title="main.c"
+    #include <stdio.h>
 
-:::user
-我想要一张搜索引擎架构图
-:::
+    int main() {
+        printf("Hello, World!\n");
+        return 0;
+    }
+    ```
+    :::
+
+    :::user
+    我想要一张搜索引擎架构图
+    :::
 
 
-:::ai
-你好，已经帮你生成完毕，以下是一张搜索引擎架构图：
-<Image src={搜索引擎架构} alt="搜索引擎架构" width="800"/>
-:::
-::::
+    :::ai
+    你好，已经帮你生成完毕，以下是一张搜索引擎架构图：
+    <Image src={搜索引擎架构} alt="搜索引擎架构" width="800"/>
+    :::
+    ::::
+  :::::
+
+  :::::tab{label="代码"}
+    ````markdown
+      ::::chat
+
+        :::user
+        你好，请帮我写一段hello world程序
+        :::
+
+        :::ai
+        当然，下面是 c 实现：
+
+        ```c title="main.c"
+        #include <stdio.h>
+
+        int main() {
+            printf("Hello, World!\n");
+            return 0;
+        }
+        ```
+        :::
+
+        :::user
+        我想要一张搜索引擎架构图
+        :::
+
+        :::ai
+        你好，已经帮你生成完毕，以下是一张搜索引擎架构图：
+        <Image src={搜索引擎架构} alt="搜索引擎架构" width="800"/>
+        :::
+    ::::
+    ````
+  :::::
+
+::::::
+

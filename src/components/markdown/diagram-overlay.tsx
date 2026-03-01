@@ -166,12 +166,12 @@ export function DiagramOverlay({ open, onClose, children }: DiagramOverlayProps)
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
       <DialogContent
         showCloseButton={false}
-        className="w-[95vw] sm:max-w-[80vw] h-[85vh] p-0 gap-0 flex flex-col overflow-hidden"
+        className="w-[95vw] sm:max-w-[80vw] h-[85vh] p-0 gap-0 flex flex-col overflow-hidden dark:bg-[oklch(0.21_0_0)] dark:border-[oklch(1_0_0/15%)] dark:shadow-[0_16px_70px_rgba(0,0,0,0.5)]"
       >
         <DialogTitle className="sr-only">全屏预览</DialogTitle>
 
         {/* 工具栏 */}
-        <div className="flex items-center justify-end gap-1 px-3 py-2 border-b border-border shrink-0">
+        <div className="flex items-center justify-end gap-1 px-3 py-2 border-b border-border shrink-0 dark:border-b-[oklch(1_0_0/10%)] dark:bg-[oklch(0.18_0_0)]">
           <ToolbarButton icon={<Icon icon="ri:zoom-out-line" className="size-4" />} title="缩小" onClick={handleZoomOut} />
           <span className="text-xs text-muted-foreground min-w-[3rem] text-center select-none">
             {Math.round(zoom * 100)}%
