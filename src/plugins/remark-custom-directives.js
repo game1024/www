@@ -87,7 +87,18 @@ export default function remarkCustomDirectives() {
         if (type === 'chat' && node.type === 'containerDirective') {
           const data = node.data || (node.data = {});
           data.hName = 'div';
+          const model = (node.attributes?.model || '').toLowerCase();
           data.hProperties = h('div', { class: 'chat-container' }).properties;
+
+          // 将 model 传递给子级 :::ai 节点
+          if (model) {
+            for (const child of node.children) {
+              if (child.type === 'containerDirective' && child.name === 'ai') {
+                child.attributes = child.attributes || {};
+                child.attributes.model = model;
+              }
+            }
+          }
           return;
         }
 
@@ -115,7 +126,17 @@ export default function remarkCustomDirectives() {
         if (type === 'ai' && node.type === 'containerDirective') {
           const data = node.data || (node.data = {});
           data.hName = 'div';
-          data.hProperties = h('div', { class: 'chat-message chat-ai' }).properties;
+          const model = (node.attributes?.model || '').toLowerCase();
+          // 根据 model 选择图标和标签
+          const modelConfig = {
+            gemini:  { icon: 'ri:gemini-line',  label: 'Gemini' },
+            gpt:     { icon: 'ri:openai-line',  label: 'GPT' },
+            claude:  { icon: 'ri:claude-line',  label: 'Claude' },
+            grok:    { icon: 'ri:grok-ai-line', label: 'Grok' },
+            copilot: { icon: 'ri:copilot-line', label: 'Copilot' },
+          };
+          const cfg = modelConfig[model] || { icon: 'ri:copilot-line', label: 'AI' };
+          data.hProperties = h('div', { class: `chat-message chat-ai${model ? ` chat-model-${model}` : ''}` }).properties;
           // 添加角色标签
           node.children.unshift({
             type: 'paragraph',
@@ -124,8 +145,8 @@ export default function remarkCustomDirectives() {
               hProperties: { class: 'chat-role' },
             },
             children: [
-              { type: 'html', value: getIconSVG('ri:robot-2-line') },
-              { type: 'text', value: 'AI' },
+              { type: 'html', value: getIconSVG(cfg.icon) },
+              { type: 'text', value: cfg.label },
             ],
           });
           return;
