@@ -51,7 +51,7 @@ import 快捷方式报错 from "./快捷方式报错.webp";
 :::
 
 ## 跨平台
-得益于tauri框架，Penio可以同时在windows、macos、linux(x11)上使用
+Penio使用了跨平台开发框架-tauri，所以可以同时在windows、macos、linux(x11)上使用
 # 开发记录
 
 ## App图标
@@ -82,8 +82,7 @@ let window = tauri::WebviewWindowBuilder::new(
 ```
 
 
-也可以在tauri.conf.json中设置
-
+我们也可以在tauri.conf.json中设置`transparent=true`
 ```json title="tauri.conf.json" {3,7} focus
 {
   "app": {
@@ -166,6 +165,45 @@ fn refresh_monitors(app: AppHandle, emit_event: bool) -> Result<(), String> {
 macos系统对应用的权限控制非常严格，一开始我在调试的时候，发现怎么都无法捕获鼠标和键盘的事件，后面才明白需要在系统设置中给应用添加辅助功能和输入监控权限，才可以正常使用全局的鼠标和键盘事件监听功能
 
 <Image src={macos权限} alt="macos权限设置" className="w-full mb-4" />
+
+## x11系统适配
+当我在linux x11系统上测试时候，发现应用会崩溃，会提示如下报错
+```bash
+[xcb] Unknown sequence number while processing queue
+[xcb] Most likely this is a multi-threaded client and XInitThreads has not been called
+[xcb] Aborting, sorry about that.
+penio: ../../src/xcb_io.c:274: poll_for_event: Assertion `!xcb_xlib_threads_sequence_lost' failed.
+Aborted
+```
+
+这是因为在x11系统上，需要在程序开头调用`XInitThreads()`来获得X11的线程支持，否则就会崩溃
+
+解决方法
+:::steps
+1. 首先在`Cargo.toml`中添加x11包
+   ```toml title="Cargo.toml"
+   [target.'cfg(target_os = "linux")'.dependencies]
+   x11 = "2.21.0"
+   ```
+
+2. 然后在`main.rs`中调用`XInitThreads()`
+   ```rust title="main.rs" {2-8} focus
+   fn main() {
+       #[cfg(target_os = "linux")]
+       {
+           use x11;
+           unsafe {
+               x11::xlib::XInitThreads();
+           }
+       }
+      
+       if let Err(e) = penio_lib::run() {
+           eprintln!("Error running application: {}", e);
+           std::process::exit(1);
+       }
+   }
+   ```
+:::
 
 # 发布记录
 

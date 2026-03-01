@@ -34,30 +34,32 @@ export function XMermaid({ source }: MermaidBlockProps) {
           fontFamily: "var(--font-code)",
           theme: isDark ? "base" : "default",
           themeVariables: isDark
-            ? {
-                primaryColor: "#24292e",
-                primaryBorderColor: "#30363d",
-                secondBgColor: "#2d333b",
-                textColor: "#c9d1d9",
-                primaryTextColor: "#c9d1d9",
-                tertiaryTextColor: "#8b949e",
-                lineColor: "#30363d",
-                signalTextDarkColor: "#c9d1d9",
-                actorLineColor: "#c9d1d9",
-                signalColor: "#b47cff"
-              }
-            : {
-                primaryColor: "#ffffff",
-                primaryBorderColor: "#d1d5da",
-                secondBgColor: "#f6f8fa",
-                textColor: "#24292e",
-                primaryTextColor: "#24292e",
-                tertiaryTextColor: "#57606a",
-                lineColor: "#e1e4e8",
-                signalTextDarkColor: "#24292e",
-                actorLineColor: "#24292e",
-                signalColor: "#7c3aed"
-              },
+          ? {
+              /* Catppuccin Mocha */
+              primaryColor: "#1e1e2e",
+              primaryBorderColor: "#45475a",
+              secondBgColor: "#181825",
+              textColor: "#cdd6f4",
+              primaryTextColor: "#cdd6f4",
+              tertiaryTextColor: "#a6adc8",
+              lineColor: "#45475a",
+              signalTextDarkColor: "#cdd6f4",
+              actorLineColor: "#585b70",
+              signalColor: "#cba6f7"
+            }
+          : {
+              /* Catppuccin Latte */
+              primaryColor: "#eff1f5",
+              primaryBorderColor: "#ccd0da",
+              secondBgColor: "#e6e9ef",
+              textColor: "#4c4f69",
+              primaryTextColor: "#4c4f69",
+              tertiaryTextColor: "#6c6f85",
+              lineColor: "#ccd0da",
+              signalTextDarkColor: "#4c4f69",
+              actorLineColor: "#9ca0b0",
+              signalColor: "#8839ef"
+            },
           securityLevel: "loose",
         });
         const id = `mermaid-${Math.random().toString(36).slice(2, 9)}`;
