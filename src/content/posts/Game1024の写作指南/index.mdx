@@ -10,8 +10,10 @@ tags: ["指南", "入门"]
 import {Image} from "astro:assets";
 import Tabs from '@/components/markdown/Tabs.astro'
 import TabItem from '@/components/markdown/TabItem.astro'
-
-import 搜索引擎架构 from "./搜索引擎架构.webp";
+import ChatContext from '@/components/markdown/ChatContext.astro'
+import 搜索引擎架构 from "./搜索引擎架构.webp"
+import Transformer from "./Transformer.webp"
+import TransformerArch from "./TransformerArch.webp"
 
 # 有序列表
 ::::tabs
@@ -749,3 +751,42 @@ data
 
 ::::::
 
+
+AIChat 组件还支持上下文功能，可以在对话中添加图片等上下文信息，AI 可以根据上下文信息生成更符合需求的回答。
+::::::tabs
+  :::::tab{label="效果预览"}
+    ::::chat{model="gemini"}
+        :::user
+        <ChatContext>
+          <Image src={TransformerArch} alt="TransformerArch" width="1000"/>
+        </ChatContext>
+        帮我把上面的图片转化成黑板粉笔风格的手绘图
+        :::
+
+        :::ai
+        好的，已经转化完毕，以下是黑板粉笔风格的手绘图：
+        <Image src={Transformer} alt="Transformer" width="1000"/>
+        :::
+      ::::
+    :::::
+    
+  :::::tab{label="代码"}
+    ````markdown
+    import ChatContext from '@/components/markdown/ChatContext.astro'
+
+    ::::chat{model="gemini"}
+        :::user
+        <ChatContext>
+          <Image src={TransformerArch} alt="Transformer" width="1000"/>
+        </ChatContext>
+        帮我把上面的图片转化成黑板粉笔风格的手绘图
+        :::
+
+        :::ai
+        好的，已经转化完毕，以下是黑板粉笔风格的手绘图：
+        <Image src={Transformer} alt="Transformer" width="1000"/>
+        :::
+    ::::
+    ````
+  :::::
+::::::
