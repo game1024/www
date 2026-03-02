@@ -9,24 +9,21 @@ const zoom = mediumZoom(".prose img:not(.ft-icon):not(.tab-icon)", {
   margin: 24,
 });
 
-// chat-context 内的图片放大时移除正方形裁剪约束
+// chat-context 内的图片：打开前临时移除正方形裁剪，让 medium-zoom 读取真实比例
 zoom.on("open", (e) => {
-  const img = e.detail.zoom.getZoomedImage();
-  if (img && img.closest(".chat-context")) {
+  const img = e.target;
+  if (img.closest(".chat-context")) {
     img.style.aspectRatio = "auto";
-    img.style.objectFit = "contain";
-    img.style.width = "auto";
-    img.style.height = "auto";
+    img.style.objectFit = "";
   }
 });
 
-zoom.on("close", (e) => {
-  const img = e.detail.zoom.getZoomedImage();
-  if (img && img.closest(".chat-context")) {
+// 关闭动画结束后恢复正方形缩略图样式
+zoom.on("closed", (e) => {
+  const img = e.target;
+  if (img.closest(".chat-context")) {
     img.style.aspectRatio = "";
     img.style.objectFit = "";
-    img.style.width = "";
-    img.style.height = "";
   }
 });
 
