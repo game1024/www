@@ -122,6 +122,14 @@ export default function remarkCustomDirectives() {
           return;
         }
 
+        // ── context 图片上下文容器指令 ────────
+        if (type === 'context' && node.type === 'containerDirective') {
+          const data = node.data || (node.data = {});
+          data.hName = 'div';
+          data.hProperties = h('div', { class: 'chat-context' }).properties;
+          return;
+        }
+
         // ── ai 消息指令 ──────────────────────
         if (type === 'ai' && node.type === 'containerDirective') {
           const data = node.data || (node.data = {});
