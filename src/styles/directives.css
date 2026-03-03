@@ -318,3 +318,18 @@
   opacity: 1;
   transform: scale(1);
 }
+
+/* ── CodePen 嵌入样式 ──────────────────── */
+.codepen-wrapper {
+  margin: 1.5rem 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.codepen-embed {
+  display: block;
+  width: 100%;
+  border: none;
+  border-radius: var(--radius-lg);
+}

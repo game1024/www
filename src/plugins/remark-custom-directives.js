@@ -184,6 +184,34 @@ export default function remarkCustomDirectives() {
           return;
         }
 
+        // ── codepen 嵌入指令 ──────────────────────
+        if (type === 'codepen' && (node.type === 'leafDirective' || node.type === 'containerDirective')) {
+          const user = node.attributes?.user;
+          const slug = node.attributes?.slug;
+          if (!user || !slug) return;
+
+          const tab = (node.attributes?.tab || 'result').replace(/,/g, '%2C');
+          const height = node.attributes?.height || '400';
+          const title = node.attributes?.title || 'CodePen Embed';
+          const theme = node.attributes?.theme || 'dark';
+          const editable = node.attributes?.editable != null;
+
+          let src = `https://codepen.io/${user}/embed/${slug}?default-tab=${tab}&theme-id=${theme}`;
+          if (editable) src += '&editable=true';
+
+          const data = node.data || (node.data = {});
+          data.hName = 'div';
+          data.hProperties = h('div', { class: 'codepen-wrapper' }).properties;
+
+          node.children = [
+            {
+              type: 'html',
+              value: `<iframe class="codepen-embed" height="${height}" style="width:100%;" scrolling="no" title="${title}" src="${src}" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true"><a href="https://codepen.io/${user}/pen/${slug}">See the Pen on CodePen</a></iframe>`,
+            },
+          ];
+          return;
+        }
+
         // ── github 仓库卡片指令 ─────────────────
         if (type === 'github' && (node.type === 'containerDirective' || node.type === 'leafDirective')) {
           const repo = node.attributes?.repo;
