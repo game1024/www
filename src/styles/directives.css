@@ -260,8 +260,8 @@
 /* ── Chat 图片上下文容器 ───────────────── */
 .chat-context {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 0.375rem;
   padding: 0.5rem;
   border-radius: var(--radius-md);
   background: hsl(var(--background) / 0.5);
@@ -278,11 +278,43 @@
   aspect-ratio: 1;
   object-fit: cover;
   border-radius: var(--radius-sm, 0.375rem);
-  cursor: pointer;
+  cursor: zoom-in;
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .chat-context img:hover {
   opacity: 0.85;
   transform: scale(1.03);
+}
+
+/* ── Chat 图片全屏预览 ─────────────────── */
+.chat-img-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.3s ease;
+  cursor: zoom-out;
+}
+
+.chat-img-overlay.active {
+  background: var(--zoom-overlay, rgba(0, 0, 0, 0.75));
+}
+
+.chat-img-full {
+  max-width: calc(100vw - 48px);
+  max-height: calc(100vh - 48px);
+  object-fit: contain;
+  border-radius: 0.5rem;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.chat-img-overlay.active .chat-img-full {
+  opacity: 1;
+  transform: scale(1);
 }
