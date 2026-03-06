@@ -176,7 +176,7 @@ penio: ../../src/xcb_io.c:274: poll_for_event: Assertion `!xcb_xlib_threads_sequ
 Aborted
 ```
 
-这是因为在x11系统上，需要在程序开头调用`XInitThreads()`来获得X11的线程支持，否则就会崩溃
+这是因为在x11系统上，我们需要在程序开头调用`XInitThreads()`
 
 解决方法
 :::steps
