@@ -1,0 +1,162 @@
+---
+title: "Windows创建一个专属的AI助手-openclaw"
+description: "本文详解如何在 Windows 上安装并初始化 OpenClaw，配置中文界面、接入腾讯云 Coding Plan 模型 API、开启工具权限，并完成本地实测，快速搭建可执行命令的专属 AI 助手。"
+createdAt: 2026-03-08 12:12
+updatedAt: 2026-03-08 12:12
+category: ""
+tags: []
+---
+import {Image} from "astro:assets";
+import 安装成功 from "./安装成功.webp";
+import openclaw设置中文语言 from "./openclaw设置中文语言.webp";
+import 腾讯云codingplan from "./腾讯云codingplan.webp";
+import 腾讯云API密钥 from "./腾讯云API密钥.webp";
+import openclaw添加模型密钥 from "./openclaw添加模型密钥.webp";
+import openclaw更新配置 from "./openclaw更新配置.webp";
+import openclaw桌面创建目录 from "./openclaw桌面创建目录.webp";
+import 桌面创建目录 from "./桌面创建目录.webp";
+
+# 安装openclaw
+
+首先我们需要安装openclaw，打开powershell，输入以下命令：
+
+```powershell
+iwr -useb https://openclaw.ai/install.ps1 | iex
+```
+
+成功的话，会显示安装成功的提示
+<Image src={安装成功} alt="安装成功" />
+
+# 启动配置
+安装完成后，openclaw需要做一下初始化的配置
+
+## 配置向导
+```powershell
+openclaw onboard
+```
+
+过程中会出现如下的向导提示词，按照下方的表格进行配置即可
+
+
+| 向导配置项 | 配置内容 |
+|---|---|
+| I understand this is powerful and inherently risky. Continue? | 选择 **Yes** |
+| Onboarding mode | 选择 **QuickStart** |
+| Model/auth provider | 选择 **Skip for now**（后续可配置） |
+| Filter models by provider | 选择 **All providers** |
+| Default model | 使用默认配置 |
+| Select channel (QuickStart) | 选择 **Skip for now**（后续可配置） |
+| Configure skills now? (recommended) | 选择 **No**（后续可配置） |
+| Enable hooks? | 按空格键选中选项，按回车键进入下一步 |
+| How do you want to hatch your bot? | 选择 **Hatch in TUI** |
+
+
+配置完成后，可以通过浏览器访问 http://localhost:18789，看到openclaw的界面
+
+## 中文界面
+openclaw默认是英文，可以在Overview -> Language 中设置中文
+
+<Image src={openclaw设置中文语言} alt="openclaw设置中文语言" />
+
+## 配置模型
+openclaw消耗Token非常快，所以不建议直接购买模型API，建议先使用国内各大厂的coding plan。
+coding plan按照请求个数收费，价格相对较低
+
+我这里使用的是腾讯云的coding plan：https://cloud.tencent.com/act/pro/codingplan
+
+目前每天限量购买：早上`10:00`刷新，我这里选择的是Pro套餐
+<Image src={腾讯云codingplan} alt="腾讯云codingplan" />
+
+
+配置模型步骤
+::::steps
+
+1. 生成API密钥
+
+    进入控制台后，我们可以点击生成API密钥
+    <Image src={腾讯云API密钥} alt="腾讯云API密钥" />
+
+2. 添加模型密钥
+
+    在Config->Raw中添加你的模型API密钥
+    <Image src={openclaw添加模型密钥} alt="openclaw添加模型密钥" />
+
+    将apiKey替换成生成的API密钥，其他复制即可
+    ```js lineno ins={4-40}
+    {
+        meta: {...},
+        wizard: {...},
+        models: {
+            mode: 'merge',
+            providers: {
+            lkeap: {
+                baseUrl: 'https://api.lkeap.cloud.tencent.com/coding/v3',
+                apiKey: '__OPENCLAW_REDACTED__',
+                api: 'openai-completions',
+                models: [
+                {
+                    id: 'kimi-k2.5',
+                    name: 'kimi-k2.5',
+                    api: 'openai-completions',
+                    reasoning: false,
+                    input: [
+                    'text',
+                    ],
+                    cost: {
+                    input: 0,
+                    output: 0,
+                    cacheRead: 0,
+                    cacheWrite: 0,
+                    },
+                    contextWindow: 202752,
+                    maxTokens: 8192,
+                },
+                ],
+            },
+        },
+        agents: {
+            defaults: {
+            model: {
+                primary: 'lkeap/kimi-k2.5',
+            },
+            models: {
+                'lkeap/kimi-k2.5': {},
+            },
+        }
+    }
+    ```
+        :::tip
+        我用的是kimi-k2.5模型，其他模型可以参考：[Coding Plan概述](https://cloud.tencent.com/document/product/1772/128947#540d21b1-f168-4435-8784-2e8d26331f65)
+        :::
+3. 配置命令权限
+
+    默认情况下，openclaw的命令是被禁止的，我们需要在Config->Raw中将tools权限打开
+    ```js lineno ins={6-11}
+    {
+        meta: {...},
+        wizard: {...},
+        models: {...},
+        agents: {...},
+        tools: {
+            profile: 'full',
+            sessions: {
+                visibility: 'all',
+            },
+        },
+    }
+    ```
+4. 保存更新
+    <Image src={openclaw更新配置} alt="openclaw更新配置" />
+
+
+::::
+
+
+# 效果
+当所有的配置工作完成后，可以在聊天窗口测试一下，让AI在桌面上创建一个目录
+<Image src={openclaw桌面创建目录} alt="openclaw桌面创建目录" />
+
+<Image src={桌面创建目录} alt="桌面创建目录" />
+
+
+> 参考文档：[腾讯云接入openclaw](https://cloud.tencent.com/document/product/1772/128949)

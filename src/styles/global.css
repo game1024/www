@@ -285,6 +285,9 @@
 
 /* Markdown 标题样式自定义 */
 @layer components {
+  .prose img{
+    @apply mb-8;
+  }
 
   /* 段落间距（类似 GitHub Markdown） */
   .prose p {
@@ -342,6 +345,10 @@
     @apply border-l-4 border-primary pl-4 py-2 my-4 italic text-muted-foreground bg-muted/30 rounded-r;
   }
 
+  .prose blockquote p {
+    @apply mb-0;
+  }
+
   /* 行内代码样式 */
   .prose :not(pre) > code {
     @apply bg-muted text-foreground font-code text-[0.875em] px-1.5 py-0.5 rounded-md border border-border;
@@ -355,6 +362,32 @@
 
   .prose a:not(.anchor-link):hover {
     @apply border-[var(--highlight)]/80;
+  }
+
+  /* 表格样式 */
+  .prose table {
+    @apply w-full my-6 border-collapse text-sm;
+  }
+
+  .prose thead {
+    @apply bg-muted/60;
+  }
+
+  .prose th {
+    @apply px-4 py-2.5 text-left font-semibold border border-border;
+  }
+
+  .prose td {
+    @apply px-4 py-2.5 border border-border;
+    letter-spacing: 0.05em;
+  }
+
+  .prose tbody tr:nth-child(even) {
+    @apply bg-muted/30;
+  }
+
+  .prose tbody tr:hover {
+    @apply bg-muted/50 transition-colors;
   }
 
   /* 删除线样式 */
