@@ -1,0 +1,40 @@
+---
+title: "openclaw-编写符合规范的SKILL"
+description: ""
+createdAt: 2026-03-09 23:19
+updatedAt: 2026-03-09 23:19
+category: "AI"
+tags: ["openclaw"]
+---
+
+# AgentSkill规范
+最近正在学习Skill的编写，但是自己写出来的Skill总觉得不够标准，所以想看看有没有官方的标准可以参考，正好查到 Anthropic 定义了一个 AgentSkill 的规范，来规范化技能的编写和使用。
+
+## 目录结构
+一个符合规范的 AgentSkill 目录结构如下
+:::filetree
+
+
+- SKILL.md
+- scripts（命令脚本）
+    - *.js
+    - *.py
+    - *.sh
+- references（参考文档）
+    - *
+
+- assets（图片，配置，数据）
+    - *
+:::
+
+## 元数据
+
+```markdown{title="SKILL.md"}
+---
+name: skill-name
+description: skill description
+version: 1.0.0
+author: author-name
+license: MIT
+---
+```

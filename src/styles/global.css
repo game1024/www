@@ -289,6 +289,14 @@
     @apply mb-8;
   }
 
+  .prose x-file-tree img {
+    @apply mb-0;
+  }
+
+  .prose x-tabs img {
+    @apply mb-0;
+  }
+
   /* 段落间距（类似 GitHub Markdown） */
   .prose p {
     @apply mb-4 leading-relaxed;

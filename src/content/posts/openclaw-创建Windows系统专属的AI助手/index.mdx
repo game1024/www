@@ -1,9 +1,9 @@
 ---
-title: "Windows创建一个专属的AI助手-openclaw"
+title: "openclaw-创建Windows系统专属的AI助手"
 description: "本文详解如何在 Windows 上安装并初始化 OpenClaw，配置中文界面、接入腾讯云 Coding Plan 模型 API、开启工具权限，并完成本地实测，快速搭建可执行命令的专属 AI 助手。"
 createdAt: 2026-03-08 12:12
 updatedAt: 2026-03-08 12:12
-category: ""
+category: "AI"
 tags: []
 ---
 import {Image} from "astro:assets";
@@ -51,7 +51,13 @@ openclaw onboard
 | How do you want to hatch your bot? | 选择 **Hatch in TUI** |
 
 
-配置完成后，可以通过浏览器访问 http://localhost:18789，看到openclaw的界面
+配置完成后，可以通过浏览器访问openclaw的界面： http://localhost:18789#token={token}
+
+如果token丢失了，也可以通过以下命令查看token
+
+```powershell
+openclaw dashboard 
+```
 
 ## 中文界面
 openclaw默认是英文，可以在Overview -> Language 中设置中文
