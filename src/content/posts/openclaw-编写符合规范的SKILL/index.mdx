@@ -8,7 +8,7 @@ tags: ["openclaw"]
 ---
 
 # AgentSkill规范
-最近正在学习Skill的编写，但是自己写出来的Skill总觉得不够标准，所以想看看有没有官方的标准可以参考，正好查到 Anthropic 定义了一个 AgentSkill 的规范，来规范化技能的编写和使用。
+最近正在学习Skill的编写，但是我目前遇到的最大疑惑是，无法确保编写的Skill是否可靠，输入输出是否稳定，以及后续是否方便维护
 
 ## 目录结构
 一个符合规范的 AgentSkill 目录结构如下
@@ -38,3 +38,6 @@ author: author-name
 license: MIT
 ---
 ```
+
+## skill-creator
+skill-creator 是 Anthropic 推出的官方的技能生成器，可以快速生成符合规范的技能，极大地降低了技能开发的门槛，推荐使用这个工具来创建技能
