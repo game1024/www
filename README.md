@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://ref.365tz87989.com/?r=RWQVZD">
+<img alt="Gemini_Generated_Image_n3p4rln3p4rln3p4" src="https://github.com/user-attachments/assets/3dcf6b88-715c-43d1-99b4-6dc21e5ea23e" />
+  </a>
+</p>
+
 # Game1024の博客
 
 🌐 [gm1024.com](https://gm1024.com)
