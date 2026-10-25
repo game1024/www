@@ -16,7 +16,7 @@ export interface CodeBlockProps {
   focus?: boolean;
   lineno?: boolean;
   highlightLines?: string;
-  insLines?: string;
+  insLines?: string; 
   delLines?: string;
   mark?: string;
   markFlags?: string;
